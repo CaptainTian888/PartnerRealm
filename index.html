@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PartnerRealm | 快船联创</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ===== CSS Variables ===== */
+:root {
+  --blue-900: #0a1628;
+  --blue-800: #0d2240;
+  --blue-700: #0f3060;
+  --blue-600: #1a4a8a;
+  --blue-500: #2563eb;
+  --blue-400: #3b82f6;
+  --blue-300: #60a5fa;
+  --blue-200: #93c5fd;
+  --blue-100: #dbeafe;
+  --gray-900: #111827;
+  --gray-800: #1f2937;
+  --gray-700: #374151;
+  --gray-600: #4b5563;
+  --gray-500: #6b7280;
+  --gray-400: #9ca3af;
+  --gray-300: #d1d5db;
+  --gray-200: #e5e7eb;
+  --gray-100: #f3f4f6;
+  --gray-50: #f9fafb;
+  --orange-500: #f97316;
+  --orange-400: #fb923c;
+  --orange-300: #fdba74;
+  --white: #ffffff;
+  --font-display: 'Outfit', 'Noto Sans SC', sans-serif;
+  --font-body: 'Noto Sans SC', 'Outfit', sans-serif;
+  --nav-height: 72px;
+  --section-padding: 100px 0;
+  --card-radius: 16px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--nav-height); }
+body {
+  font-family: var(--font-body);
+  color: var(--gray-800);
+  background: var(--gray-50);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+img { max-width: 100%; display: block; }
+
+/* ===== Utility ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.section-title {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--blue-900);
+  text-align: center;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+.section-subtitle {
+  text-align: center;
+  color: var(--gray-500);
+  font-size: 1.05rem;
+  margin-bottom: 56px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--blue-500), var(--blue-400));
+  color: var(--white);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.45);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid rgba(255,255,255,0.4);
+}
+.btn-outline:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.7);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--blue-500);
+  border: 2px solid var(--blue-200);
+}
+.btn-ghost:hover {
+  background: var(--blue-100);
+  border-color: var(--blue-400);
+}
+
+/* ===== Navigation ===== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--nav-height);
+  z-index: 1000;
+  background: rgba(10, 22, 40, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: var(--transition);
+}
+.navbar.scrolled {
+  background: rgba(10, 22, 40, 0.96);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.2);
+}
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+}
+.logo-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, var(--blue-400), var(--orange-500));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--white);
+  letter-spacing: -1px;
+}
+.logo-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255,255,255,0.25);
+  margin: 0 4px;
+}
+.logo-cn {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--blue-200);
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-links a {
+  padding: 8px 20px;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: var(--transition);
+  position: relative;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: var(--white);
+  background: rgba(255,255,255,0.08);
+}
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2px;
+  background: var(--orange-400);
+  border-radius: 2px;
+}
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1001;
+}
+.hamburger span {
+  width: 24px;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: var(--transition);
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ===== Mobile Nav ===== */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 280px;
+  height: 100vh;
+  background: var(--blue-900);
+  z-index: 999;
+  padding: 100px 32px 40px;
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -10px 0 40px rgba(0,0,0,0.3);
+}
+.mobile-nav.open { right: 0; }
+.mobile-nav a {
+  display: block;
+  padding: 16px 0;
+  color: rgba(255,255,255,0.75);
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: var(--transition);
+}
+.mobile-nav a:hover { color: var(--white); padding-left: 8px; }
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.mobile-overlay.open { opacity: 1; }
+
+/* ===== Hero Section ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: var(--blue-900);
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 40%, rgba(37, 99, 235, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 20% 70%, rgba(249, 115, 22, 0.08) 0%, transparent 60%),
+    linear-gradient(180deg, var(--blue-900) 0%, #0c1e3a 100%);
+}
+/* Animated grid lines */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(59,130,246,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(60px, 60px); }
+}
+/* Floating orbs */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: orbFloat 8s ease-in-out infinite alternate;
+}
+.hero-orb-1 {
+  width: 400px; height: 400px;
+  background: rgba(37, 99, 235, 0.12);
+  top: 10%; right: 10%;
+  animation-delay: 0s;
+}
+.hero-orb-2 {
+  width: 300px; height: 300px;
+  background: rgba(249, 115, 22, 0.08);
+  bottom: 15%; left: 5%;
+  animation-delay: -3s;
+}
+@keyframes orbFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(30px, -20px) scale(1.1); }
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(37, 99, 235, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 50px;
+  color: var(--blue-300);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 28px;
+  animation: fadeInUp 0.8s ease-out;
+}
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--blue-400);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: 3.8rem;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+.hero h1 span {
+  background: linear-gradient(135deg, var(--blue-300), var(--orange-400));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-desc {
+  font-size: 1.15rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.8;
+  margin-bottom: 40px;
+  max-width: 560px;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+.hero-stats {
+  display: flex;
+  gap: 48px;
+  margin-top: 64px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+.hero-stat h3 {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.02em;
+}
+.hero-stat h3 .accent { color: var(--orange-400); }
+.hero-stat p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.45);
+  margin-top: 4px;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Quick Access ===== */
+.quick-access {
+  position: relative;
+  z-index: 3;
+  margin-top: -56px;
+  padding-bottom: 80px;
+}
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.quick-card {
+  background: var(--white);
+  border-radius: var(--card-radius);
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  transition: var(--transition);
+  cursor: pointer;
+  border: 1px solid var(--gray-200);
+}
+.quick-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+  border-color: var(--blue-200);
+}
+.quick-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+.quick-icon.blue { background: var(--blue-100); color: var(--blue-500); }
+.quick-icon.orange { background: #fff7ed; color: var(--orange-500); }
+.quick-icon.teal { background: #f0fdfa; color: #0d9488; }
+.quick-icon.purple { background: #faf5ff; color: #9333ea; }
+.quick-card h4 {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--gray-800);
+  margin-bottom: 6px;
+}
+.quick-card p {
+  font-size: 0.82rem;
+  color: var(--gray-500);
+}
+
+/* ===== News Section ===== */
+.news-section {
+  padding: var(--section-padding);
+  background: var(--white);
+}
+.news-list {
+  max-width: 860px;
+  margin: 0 auto;
+}
+.news-item {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--gray-200);
+  transition: var(--transition);
+  cursor: pointer;
+}
+.news-item:first-child { border-top: 1px solid var(--gray-200); }
+.news-item:hover { padding-left: 12px; }
+.news-date {
+  font-size: 0.82rem;
+  color: var(--gray-400);
+  font-weight: 500;
+  font-family: var(--font-display);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.news-date::before {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--blue-400);
+  flex-shrink: 0;
+}
+.news-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-bottom: 8px;
+  transition: var(--transition);
+}
+.news-item:hover .news-title { color: var(--blue-500); }
+.news-summary {
+  font-size: 0.92rem;
+  color: var(--gray-500);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+.news-link {
+  font-size: 0.85rem;
+  color: var(--blue-500);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+.news-link:hover { gap: 10px; }
+.news-link::after { content: '→'; }
+
+/* ===== Projects Section ===== */
+.projects-section {
+  padding: var(--section-padding);
+  background: linear-gradient(180deg, var(--gray-50) 0%, var(--white) 100%);
+}
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+.project-card {
+  background: var(--white);
+  border-radius: var(--card-radius);
+  padding: 32px 28px;
+  border: 1px solid var(--gray-200);
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue-400), var(--blue-500));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.project-card:hover::before { transform: scaleX(1); }
+.project-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.1);
+  border-color: var(--blue-200);
+}
+.project-card.hidden { display: none; }
+.project-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  background: var(--blue-100);
+  color: var(--blue-600);
+}
+.project-card:nth-child(2n) .project-icon { background: #fff7ed; color: var(--orange-500); }
+.project-card:nth-child(3n) .project-icon { background: #f0fdfa; color: #0d9488; }
+.project-card:nth-child(5n) .project-icon { background: #faf5ff; color: #9333ea; }
+.project-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.project-card p {
+  font-size: 0.88rem;
+  color: var(--gray-500);
+  line-height: 1.7;
+}
+.project-card .detail-text {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, margin 0.3s ease;
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  line-height: 1.7;
+}
+.project-card.expanded .detail-text {
+  max-height: 200px;
+  margin-top: 12px;
+}
+.project-toggle {
+  margin-top: 14px;
+  font-size: 0.82rem;
+  color: var(--blue-500);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.projects-toggle-all {
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* ===== Join Section ===== */
+.join-section {
+  padding: var(--section-padding);
+  background: var(--blue-900);
+  position: relative;
+  overflow: hidden;
+}
+.join-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(37,99,235,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.join-section .section-title { color: var(--white); }
+.join-section .section-subtitle { color: rgba(255,255,255,0.5); }
+.join-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  position: relative;
+  z-index: 2;
+}
+.join-info h3 {
+  color: var(--white);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.join-info h3::before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  background: var(--orange-400);
+  border-radius: 2px;
+}
+.join-list {
+  margin-bottom: 36px;
+}
+.join-list li {
+  padding: 12px 0;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.92rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.join-list li::before {
+  content: '✓';
+  color: var(--blue-300);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.join-form {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--card-radius);
+  padding: 40px;
+  backdrop-filter: blur(10px);
+}
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.form-group label .required {
+  color: var(--orange-400);
+  margin-left: 2px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  transition: var(--transition);
+  outline: none;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255,255,255,0.25);
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--blue-400);
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.5)' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+.form-group select option {
+  background: var(--blue-900);
+  color: var(--white);
+}
+.form-group textarea { resize: vertical; min-height: 100px; }
+.char-count {
+  text-align: right;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.3);
+  margin-top: 4px;
+}
+.form-submit {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--blue-500), var(--blue-400));
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+}
+.form-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.45);
+}
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: var(--white);
+  color: var(--gray-800);
+  padding: 20px 32px;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 480px;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.toast-icon {
+  width: 36px;
+  height: 36px;
+  background: #dcfce7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #16a34a;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* ===== Footer ===== */
+.footer {
+  background: #060e1a;
+  padding: 60px 0 0;
+  color: rgba(255,255,255,0.5);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.footer-brand .logo { margin-bottom: 16px; }
+.footer-brand p {
+  font-size: 0.88rem;
+  line-height: 1.8;
+  max-width: 320px;
+}
+.footer-col h4 {
+  color: var(--white);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.footer-col a {
+  display: block;
+  font-size: 0.85rem;
+  padding: 6px 0;
+  transition: var(--transition);
+}
+.footer-col a:hover { color: var(--blue-300); padding-left: 4px; }
+.footer-contact li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 0.85rem;
+}
+.footer-bottom {
+  padding: 24px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+}
+.footer-legal {
+  display: flex;
+  gap: 24px;
+}
+.footer-legal a:hover { color: var(--blue-300); }
+
+/* ===== Scroll Animations ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .hero h1 { font-size: 3rem; }
+  .hero-stats { gap: 32px; }
+  .join-grid { grid-template-columns: 1fr; gap: 40px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+@media (max-width: 768px) {
+  :root { --nav-height: 64px; --section-padding: 72px 0; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .mobile-nav { display: block; }
+  .hero h1 { font-size: 2.2rem; }
+  .hero-desc { font-size: 1rem; }
+  .hero-stats { flex-direction: column; gap: 20px; }
+  .hero-stat h3 { font-size: 1.6rem; }
+  .quick-grid { grid-template-columns: repeat(2, 1fr); }
+  .section-title { font-size: 1.8rem; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.8rem; }
+  .hero-actions { flex-direction: column; }
+  .quick-grid { grid-template-columns: 1fr; }
+  .join-form { padding: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Navigation ===== -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="#home" class="logo">
+      <div class="logo-icon">PR</div>
+      <span>PartnerRealm</span>
+      <span class="logo-divider"></span>
+      <span class="logo-cn">快船联创</span>
+    </a>
+    <div class="nav-links">
+      <a href="#home" class="active">首页</a>
+      <a href="#news">联盟动态</a>
+      <a href="#projects">项目板块</a>
+      <a href="#join">加入联盟</a>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="toggleMobile()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Navigation -->
+<div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobile()"></div>
+<div class="mobile-nav" id="mobileNav">
+  <a href="#home" onclick="toggleMobile()">首页</a>
+  <a href="#news" onclick="toggleMobile()">联盟动态</a>
+  <a href="#projects" onclick="toggleMobile()">项目板块</a>
+  <a href="#join" onclick="toggleMobile()">加入联盟</a>
+</div>
+
+<!-- ===== Hero Section ===== -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">PartnerRealm 联盟伙伴中心</div>
+      <h1>快船联创<br><span>链接全球商业新可能</span></h1>
+      <p class="hero-desc">聚焦全球跨境与科技服务，为企业提供从合规到增长的全链路解决方案，打造共生共赢的伙伴生态。</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">探索核心业务</a>
+        <a href="#join" class="btn btn-outline">加入联盟</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <h3>10<span class="accent">+</span></h3>
+          <p>核心业务板块</p>
+        </div>
+        <div class="hero-stat">
+          <h3>30<span class="accent">+</span></h3>
+          <p>全球服务网点</p>
+        </div>
+        <div class="hero-stat">
+          <h3>500<span class="accent">+</span></h3>
+          <p>生态合作伙伴</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Quick Access ===== -->
+<section class="quick-access">
+  <div class="container">
+    <div class="quick-grid">
+      <a href="#news" class="quick-card reveal">
+        <div class="quick-icon blue">📢</div>
+        <h4>联盟动态</h4>
+        <p>了解最新联盟动态与资讯</p>
+      </a>
+      <a href="#projects" class="quick-card reveal">
+        <div class="quick-icon orange">🧩</div>
+        <h4>项目板块</h4>
+        <p>探索十大核心业务领域</p>
+      </a>
+      <a href="#join" class="quick-card reveal">
+        <div class="quick-icon teal">🤝</div>
+        <h4>加入联盟</h4>
+        <p>成为联盟伙伴 共享机遇</p>
+      </a>
+      <a href="#contact" class="quick-card reveal">
+        <div class="quick-icon purple">💬</div>
+        <h4>联系我们</h4>
+        <p>随时获取专业服务支持</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== News Section ===== -->
+<section class="news-section" id="news">
+  <div class="container">
+    <h2 class="section-title reveal">快船联创 最新动态</h2>
+    <p class="section-subtitle reveal">实时掌握联盟生态的每一次跃迁</p>
+    <div class="news-list">
+
+      <div class="news-item reveal">
+        <div class="news-date">2026-04-08</div>
+        <div class="news-title">快船联创AI+媒体推广平台正式上线，赋能内容创作者高效变现</div>
+        <p class="news-summary">联盟旗下AI+媒体推广业务正式发布智能推广平台，整合CPA拉新与小说推文推广能力，通过AI算法精准定位流量渠道，帮助创作者与广告主实现高效触达。</p>
+        <span class="news-link">查看详情</span>
+      </div>
+
+      <div class="news-item reveal">
+        <div class="news-date">2026-03-22</div>
+        <div class="news-title">快船联创新增东南亚跨境合规服务网点</div>
+        <p class="news-summary">联盟跨境合规与架构业务正式落地新加坡与曼谷，为出海企业提供更高效、更本地化的海外主体设立与财税合规服务，覆盖东南亚六国核心市场。</p>
+        <span class="news-link">查看详情</span>
+      </div>
+
+      <div class="news-item reveal">
+        <div class="news-date">2026-03-10</div>
+        <div class="news-title">全球智慧供应链北美仓储中心扩容完成</div>
+        <p class="news-summary">联盟在美西新增两个仓储节点，总面积突破5万平方米，支持美国全境48小时达，进一步提升北美地区物流履约能力和供应链弹性。</p>
+        <span class="news-link">查看详情</span>
+      </div>
+
+      <div class="news-item reveal">
+        <div class="news-date">2026-02-28</div>
+        <div class="news-title">私有化AI交付项目完成首批企业客户落地</div>
+        <p class="news-summary">首批三家企业客户成功完成全栈AI模型私有化部署，实现数据完全本地化处理，标志着联盟AI业务进入规模化交付阶段。</p>
+        <span class="news-link">查看详情</span>
+      </div>
+
+      <div class="news-item reveal">
+        <div class="news-date">2026-02-15</div>
+        <div class="news-title">快船联创2025年度联盟伙伴大会圆满举行</div>
+        <p class="news-summary">联盟年度伙伴大会汇聚全球200余家合作伙伴代表，发布2026年联盟战略规划，涵盖Web3数字化、离岸金融服务等多个新增长赛道。</p>
+        <span class="news-link">查看详情</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Projects Section ===== -->
+<section class="projects-section" id="projects">
+  <div class="container">
+    <h2 class="section-title reveal">核心项目板块</h2>
+    <p class="section-subtitle reveal">覆盖跨境合规、AI科技、金融服务等十大赛道，构建全链路生态体系</p>
+    <div class="projects-grid" id="projectsGrid">
+
+      <!-- Card 1 -->
+      <div class="project-card reveal" onclick="toggleCard(this)">
+        <div class="project-icon">🌐</div>
+        <h3>跨境合规与架构</h3>
+        <p>海外架构搭建及全球财税合规管理</p>
+        <div class="detail-text">提供海外主体设立、跨境税务筹划、合规审计等全流程支持，帮助企业安全高效地完成全球化布局。</div>
+        <span class="project-toggle">展开详情 ↓</span>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="project-card reveal" onclick="toggleCard(this)">
+        <div class="project-icon">🏷️</div>
+        <h3>国际品牌管理</h3>
+        <p>助力企业品牌出海，一站式运营支持</p>
+        <div class="detail-text">提供全球主流平台（亚马逊、Shopee等）开店指导、本地化运营、品牌推广等一站式出海支持。</div>
+        <span class="project-toggle">展开详情 ↓</span>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="project-card reveal" onclick="toggleCard(this)">
+        <div class="project-icon">📦</div>
+        <h3>全球智慧供应链</h3>
+        <p>覆盖北美、欧洲、东南亚的仓储体系</p>
+        <div class="detail-text">依托海外仓储网络，提供定制化跨境仓储、物流配送、库存管理等供应链解决方案。</div>
+        <span class="project-toggle">展开详情 ↓</span>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="project-card reveal" onclick="toggleCard(this)">
+        <div class="project-icon">🤖</div>
+        <h3>私有化AI交付</h3>
+        <p>企业级全栈AI模型部署与私有化方案</p>
+        <div class="detail-text">提供向量数据库搭建、本地化私有部署，保障数据安全与自主可控，赋能企业智能化转型。</div>
+        <span class="project-toggle">展开详情 ↓</span>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="project-card reveal" onclick="toggleCard(this)">
+        <div class="project-icon">⚡</div>
+        <h3>智能Agent</h3>
+        <p>智能体编排调度与API网关管理</p>
+        <div class="detail-text">负责多维度权限安全治理，统一API网关管理，助力企业实现智能化业务协同与高效运营。</div>
+        <span class="project-toggle">展开详情 ↓</span>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="project-card reveal" onclick="toggleCard(this)">
+        <div class="project-icon">🔄</div>
+        <h3>自动化工作流</h3>
+        <p>低代码多模态自动化工作流搭建</p>
+        <div class="detail-text">覆盖生产、运营、客服等场景，通过低代码/无代码工具重塑企业运营效率。</div>
+        <span class="project-toggle">展开详情 ↓</span>
+      </div>
+
+      <!-- Card 7 - Initially Hidden -->
+      <div class="project-card reveal hidden" onclick="toggleCard(this)">
+        <div class="project-icon">📊</div>
+        <h3>数字资产量化</h3>
+        <p>基于多因子量化模型的智能交易策略</p>
+        <div class="detail-text">专注全球区块链金融市场，提供智能交易策略、风险管控等专业量化服务。</div>
+        <span class="project-toggle">展开详情 ↓</span>
+      </div>
+
+      <!-- Card 8 - Initially Hidden -->
+      <div class="project-card reveal hidden" onclick="toggleCard(this)">
+        <div class="project-icon">🔗</div>
+        <h3>Web3数字化</h3>
+        <p>实体资产数字化映射与链上合规治理</p>
+        <div class="detail-text">引导企业完成Web3场景业务设计、链上合规治理，实现业务转型升级。</div>
+        <span class="project-toggle">展开详情 ↓</span>
+      </div>
+
+      <!-- Card 9 - Initially Hidden -->
+      <div class="project-card reveal hidden" onclick="toggleCard(this)">
+        <div class="project-icon">🏦</div>
+        <h3>离岸金融服务</h3>
+        <p>全球离岸商事主体管理与资金调度</p>
+        <div class="detail-text">提供跨境资金调度、流动性支撑、海外资产管理等专业离岸金融解决方案。</div>
+        <span class="project-toggle">展开详情 ↓</span>
+      </div>
+
+      <!-- Card 10 - Initially Hidden -->
+      <div class="project-card reveal hidden" onclick="toggleCard(this)">
+        <div class="project-icon">📡</div>
+        <h3>AI+媒体推广业务</h3>
+        <p>AI驱动的精准流量获取与转化</p>
+        <div class="detail-text">开展AI自媒体CPA拉新、小说推文智能推广，依托AI算法精准定位流量，提升转化效率。</div>
+        <span class="project-toggle">展开详情 ↓</span>
+      </div>
+
+    </div>
+    <div class="projects-toggle-all">
+      <button class="btn btn-ghost" id="toggleAllBtn" onclick="toggleAllProjects()">查看全部业务</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Join Section ===== -->
+<section class="join-section" id="join">
+  <div class="container">
+    <h2 class="section-title reveal">加入快船联创 共享全球机遇</h2>
+    <p class="section-subtitle reveal">成为联盟伙伴，与我们共同开拓全球商业版图</p>
+    <div class="join-grid">
+
+      <!-- Left: Info -->
+      <div class="join-info reveal">
+        <h3>伙伴权益</h3>
+        <ul class="join-list">
+          <li>共享联盟全球客户资源与渠道网络</li>
+          <li>享受内部业务合作专属折扣</li>
+          <li>参与联盟专属培训与行业峰会</li>
+          <li>优先对接联盟核心项目与新兴赛道</li>
+          <li>获取联盟品牌背书与市场推广支持</li>
+        </ul>
+        <h3>加入条件</h3>
+        <ul class="join-list">
+          <li>具有合法经营资质与良好商业信誉</li>
+          <li>认同联盟发展理念与合作价值观</li>
+          <li>具备对应业务板块的服务能力或资源</li>
+        </ul>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="join-form reveal">
+        <div class="form-group">
+          <label>企业名称 <span class="required">*</span></label>
+          <input type="text" id="companyName" placeholder="请输入企业全称">
+        </div>
+        <div class="form-group">
+          <label>联系人姓名 <span class="required">*</span></label>
+          <input type="text" id="contactName" placeholder="请输入联系人姓名">
+        </div>
+        <div class="form-group">
+          <label>联系电话 <span class="required">*</span></label>
+          <input type="tel" id="contactPhone" placeholder="请输入联系电话">
+        </div>
+        <div class="form-group">
+          <label>主营业务板块 <span class="required">*</span></label>
+          <select id="businessType">
+            <option value="" disabled selected>请选择主营业务板块</option>
+            <option value="跨境合规与架构">跨境合规与架构</option>
+            <option value="国际品牌管理">国际品牌管理</option>
+            <option value="全球智慧供应链">全球智慧供应链</option>
+            <option value="私有化AI交付">私有化AI交付</option>
+            <option value="智能Agent">智能Agent</option>
+            <option value="自动化工作流">自动化工作流</option>
+            <option value="数字资产量化">数字资产量化</option>
+            <option value="Web3数字化">Web3数字化</option>
+            <option value="离岸金融服务">离岸金融服务</option>
+            <option value="AI+媒体推广业务">AI+媒体推广业务</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>企业简介 <span class="required">*</span></label>
+          <textarea id="companyIntro" placeholder="请简要介绍您的企业（500字以内）" maxlength="500" oninput="updateCharCount()"></textarea>
+          <div class="char-count"><span id="charCount">0</span>/500</div>
+        </div>
+        <button class="form-submit" onclick="submitForm()">提交申请</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer" id="contact">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon">PR</div>
+          <span>PartnerRealm</span>
+          <span class="logo-divider"></span>
+          <span class="logo-cn">快船联创</span>
+        </div>
+        <p>聚焦全球跨境与科技服务，为企业提供从合规到增长的全链路解决方案，打造共生共赢的伙伴生态。</p>
+      </div>
+      <div class="footer-col">
+        <h4>快速导航</h4>
+        <a href="#home">首页</a>
+        <a href="#news">联盟动态</a>
+        <a href="#projects">项目板块</a>
+        <a href="#join">加入联盟</a>
+      </div>
+      <div class="footer-col">
+        <h4>核心业务</h4>
+        <a href="#projects">跨境合规与架构</a>
+        <a href="#projects">私有化AI交付</a>
+        <a href="#projects">全球智慧供应链</a>
+        <a href="#projects">离岸金融服务</a>
+      </div>
+      <div class="footer-col">
+        <h4>联系我们</h4>
+        <ul class="footer-contact">
+          <li>📍 深圳市南山区科技园</li>
+          <li>📞 +86 400-888-8888</li>
+          <li>📧 contact@partnerrealm.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 PartnerRealm 快船联创 保留所有权利</span>
+      <div class="footer-legal">
+        <a href="javascript:void(0)">隐私政策</a>
+        <a href="javascript:void(0)">服务条款</a>
+        <a href="javascript:void(0)">法律声明</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== Toast Notification ===== -->
+<div class="toast" id="toast">
+  <div class="toast-icon">✓</div>
+  <div>
+    <strong>申请已提交</strong><br>
+    <span style="font-size:0.85rem;color:var(--gray-500);">我们将在3个工作日内与您联系</span>
+  </div>
+</div>
+
+<!-- ===== JavaScript ===== -->
+<script>
+/* --- Mobile Menu --- */
+function toggleMobile() {
+  const nav = document.getElementById('mobileNav');
+  const overlay = document.getElementById('mobileOverlay');
+  const hamburger = document.getElementById('hamburger');
+  const isOpen = nav.classList.contains('open');
+  nav.classList.toggle('open');
+  overlay.classList.toggle('open');
+  hamburger.classList.toggle('open');
+  document.body.style.overflow = isOpen ? '' : 'hidden';
+}
+
+/* --- Navbar scroll effect --- */
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+/* --- Active nav link on scroll --- */
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY + 100;
+  sections.forEach(sec => {
+    const top = sec.offsetTop - 100;
+    const height = sec.offsetHeight;
+    const id = sec.getAttribute('id');
+    const link = document.querySelector(`.nav-links a[href="#${id}"]`);
+    if (link) {
+      link.classList.toggle('active', scrollY >= top && scrollY < top + height);
+    }
+  });
+});
+
+/* --- Scroll reveal --- */
+const revealElements = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+revealElements.forEach(el => revealObserver.observe(el));
+
+/* --- Project card toggle --- */
+function toggleCard(card) {
+  const isExpanded = card.classList.contains('expanded');
+  card.classList.toggle('expanded');
+  const toggle = card.querySelector('.project-toggle');
+  toggle.textContent = isExpanded ? '展开详情 ↓' : '收起 ↑';
+}
+
+/* --- Show all / collapse projects --- */
+let allVisible = false;
+function toggleAllProjects() {
+  allVisible = !allVisible;
+  const hiddenCards = document.querySelectorAll('.project-card.hidden');
+  const btn = document.getElementById('toggleAllBtn');
+  if (allVisible) {
+    hiddenCards.forEach(c => { c.style.display = ''; c.classList.remove('hidden'); });
+    btn.textContent = '收起部分业务';
+    // Re-observe for reveal
+    document.querySelectorAll('.project-card').forEach(c => {
+      if (!c.classList.contains('visible')) revealObserver.observe(c);
+    });
+  } else {
+    document.querySelectorAll('.project-card').forEach((c, i) => {
+      if (i >= 6) { c.classList.add('hidden'); c.style.display = 'none'; }
+    });
+    btn.textContent = '查看全部业务';
+  }
+}
+
+/* --- Char count --- */
+function updateCharCount() {
+  const textarea = document.getElementById('companyIntro');
+  document.getElementById('charCount').textContent = textarea.value.length;
+}
+
+/* --- Form submit --- */
+function submitForm() {
+  const fields = [
+    { id: 'companyName', label: '企业名称' },
+    { id: 'contactName', label: '联系人姓名' },
+    { id: 'contactPhone', label: '联系电话' },
+    { id: 'businessType', label: '主营业务板块' },
+    { id: 'companyIntro', label: '企业简介' }
+  ];
+  for (const f of fields) {
+    if (!document.getElementById(f.id).value.trim()) {
+      alert('请填写' + f.label);
+      document.getElementById(f.id).focus();
+      return;
+    }
+  }
+  // Show toast
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4000);
+  // Reset form
+  fields.forEach(f => {
+    const el = document.getElementById(f.id);
+    if (el.tagName === 'SELECT') el.selectedIndex = 0;
+    else el.value = '';
+  });
+  document.getElementById('charCount').textContent = '0';
+}
+</script>
+
+</body>
+</html>
