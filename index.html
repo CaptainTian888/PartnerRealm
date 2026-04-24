@@ -1,40 +1,46 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Partner Realm</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
-</head>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Partner Realm</title>
+    <link rel="icon" type="image/png" href="https://imagehub.tianzeqi.dev/file/favicon/1775708613286_Partner Realm.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
 <body>
-  <div class="background-glow background-glow-a"></div>
-  <div class="background-glow background-glow-b"></div>
-  <div class="app-shell">
-    <header class="hero">
-      <div>
-        <p class="eyebrow">Partner Management System</p>
-        <h1>Partner Realm</h1>
-        <p class="hero-copy">
-          A lightweight partner management platform with Google and email authentication, admin-side partner operations, renewal tracking, and partner-side payment screenshot uploads.
-        </p>
-      </div>
-      <div class="hero-actions">
-        <span class="badge">Cloudflare Pages Ready</span>
-        <span class="badge">Supabase Auth + Storage</span>
-      </div>
-    </header>
-
-    <main id="app" class="layout">
-      <section class="panel panel-loading">
-        <p>Initializing the system...</p>
-      </section>
-    </main>
-  </div>
-
+    <div class="app-root">
+          <nav class="sidebar" id="sidebar">
+                  <div class="sidebar-logo">
+                            <img src="https://imagehub.tianzeqi.dev/file/favicon/1775708613286_Partner Realm.png" alt="Logo" class="logo-img">
+                            <span class="logo-text">Partner Realm</span>span>
+                  </div>div>
+                  <div class="sidebar-nav" id="sidebar-nav"></div>div>
+                  <div class="sidebar-footer" id="sidebar-footer"></div>div>
+          </nav>nav>
+          <div class="main-wrapper">
+                  <header class="topbar" id="topbar">
+                            <div class="topbar-left">
+                                        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle sidebar">
+                                                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>svg>
+                                        </button>button>
+                                        <div class="page-title" id="page-title">Partner Realm</div>
+                            </div>div>
+                            <div class="topbar-right" id="topbar-right"></div>div>
+                  </header>header>
+                  <main id="app" class="app-main">
+                            <div class="init-loading">
+                                        <div class="spinner"></div>div>
+                                        <p>正在初始化...</p>
+                            </div>div>
+                  </main>main>
+          </div>div>
+    </div>div>
   <script src="./config.js"></script>
   <script type="module" src="./app.js"></script>
 </body>
-</html>
+</html>html></p>
+</body></title>
+  </head>
