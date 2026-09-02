@@ -44,28 +44,47 @@ Cloudflare Workers + D1 架构：数据存在数据库里，接口由 Worker 提
 
 ## 首次部署
 
+完整步骤见 **[DEPLOY.md](DEPLOY.md)**（含控制台截图路径、绑定 D1 的三种做法、排错表）。
+
+最短路径：
+
 ```bash
 npm install
+npx wrangler login
 
-# 1. 建数据库，把输出的 database_id 填进 wrangler.jsonc
-npm run db:create
+npm run deploy      # 首次会自动创建并绑定 D1，把 database_id 回写进 wrangler.jsonc
+npm run db:migrate  # 建表并写入初始数据
 
-# 2. 建表并写入初始数据
-npm run db:migrate
+npx wrangler secret put ADMIN_PASSWORD    # 后台登录口令
+npx wrangler secret put SESSION_SECRET    # 会话密钥，≥32 字符
 
-# 3. 设置两个机密（交互式输入，不会留在命令历史里）
-npx wrangler secret put ADMIN_PASSWORD    # 后台登录口令，自己定
-npx wrangler secret put SESSION_SECRET    # 会话签名密钥，随便一串长随机字符
-
-# 4. 上线
-npm run deploy
+npm run deploy      # 再部署一次，让机密生效
 ```
 
-`SESSION_SECRET` 可以这样生成：
+## 配置项
 
-```bash
-node -e "console.log(crypto.randomUUID()+crypto.randomUUID())"
-```
+**所有配置都在 Cloudflare 里，仓库中不含任何凭证。**
+控制台位置：Workers & Pages → partnerrealm → Settings → Variables and Secrets。
+
+必填（类型选 **Secret**）：
+
+| 名称 | 说明 |
+|---|---|
+| `ADMIN_PASSWORD` | 后台登录口令 |
+| `SESSION_SECRET` | 会话签名密钥，至少 32 字符 |
+
+可选（类型选 **Text**，留空即用默认值）：
+
+| 名称 | 默认 | 范围 | 作用 |
+|---|---|---|---|
+| `SESSION_TTL_HOURS` | 8 | 1–720 | 登录有效期 |
+| `LOGIN_MAX_FAILS` | 8 | 3–100 | 锁定前允许的失败次数 |
+| `LOGIN_WINDOW_MINUTES` | 15 | 1–1440 | 失败计数窗口与锁定时长 |
+| `PUBLIC_CACHE_SECONDS` | 60 | 0–86400 | 门户接口缓存，0 表示不缓存 |
+
+非法值自动回退默认、越界值自动钳到边界，不会让站点崩掉。
+`wrangler.jsonc` 设了 `keep_vars: true`，控制台里改的变量不会被下次部署覆盖。
+机密与变量改完**即时生效**，不需要重新部署。
 
 ## 本地开发
 

@@ -5,11 +5,9 @@
  * 前端 JS 读不到，也就无法被 XSS 顺走。校验只做签名与过期检查，不查库。
  */
 
-const COOKIE = 'wlt_session';
-const SESSION_TTL = 8 * 60 * 60; // 秒
-const LOGIN_WINDOW = 15 * 60 * 1000; // 限流窗口
-const LOGIN_MAX_FAILS = 8;
+import { settings } from './config.js';
 
+const COOKIE = 'wlt_session';
 const enc = new TextEncoder();
 
 function b64urlEncode(bytes) {
@@ -41,7 +39,8 @@ function timingSafeEqual(a, b) {
 
 /** 签发会话令牌：payload.签名 */
 export async function issueToken(env) {
-  const payload = { exp: Math.floor(Date.now() / 1000) + SESSION_TTL, iat: Math.floor(Date.now() / 1000) };
+  const ttl = settings(env).sessionTtl;
+  const payload = { exp: Math.floor(Date.now() / 1000) + ttl, iat: Math.floor(Date.now() / 1000) };
   const body = b64urlEncode(enc.encode(JSON.stringify(payload)));
   const key = await hmacKey(env.SESSION_SECRET);
   const sig = await crypto.subtle.sign('HMAC', key, enc.encode(body));
@@ -79,13 +78,13 @@ export function readSessionCookie(request) {
   return null;
 }
 
-export function sessionCookie(token, { secure }) {
+export function sessionCookie(token, { secure, ttl }) {
   const attrs = [
     `${COOKIE}=${token}`,
     'Path=/',
     'HttpOnly',
     'SameSite=Strict',
-    `Max-Age=${SESSION_TTL}`,
+    `Max-Age=${ttl}`,
   ];
   if (secure) attrs.push('Secure');
   return attrs.join('; ');
@@ -110,12 +109,13 @@ export function clientIp(request) {
 
 /** 返回 { blocked, remaining }，blocked 为真表示该来源暂时不允许再试 */
 export async function checkLoginThrottle(env, ip) {
-  const since = Date.now() - LOGIN_WINDOW;
+  const { loginWindow, loginMaxFails } = settings(env);
+  const since = Date.now() - loginWindow;
   await env.DB.prepare('DELETE FROM login_attempts WHERE at < ?').bind(since).run();
   const row = await env.DB.prepare('SELECT COUNT(*) AS n FROM login_attempts WHERE ip = ? AND at >= ?')
     .bind(ip, since).first();
   const fails = row ? row.n : 0;
-  return { blocked: fails >= LOGIN_MAX_FAILS, remaining: Math.max(0, LOGIN_MAX_FAILS - fails) };
+  return { blocked: fails >= loginMaxFails, remaining: Math.max(0, loginMaxFails - fails) };
 }
 
 export async function recordLoginFailure(env, ip) {
@@ -133,4 +133,4 @@ export function checkPassword(env, password) {
   return timingSafeEqual(password, env.ADMIN_PASSWORD);
 }
 
-export { SESSION_TTL };
+

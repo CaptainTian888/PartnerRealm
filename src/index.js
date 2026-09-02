@@ -6,10 +6,11 @@
  */
 import {
   isAuthed, issueToken, sessionCookie, clearCookie, checkPassword,
-  clientIp, checkLoginThrottle, recordLoginFailure, clearLoginFailures, SESSION_TTL,
+  clientIp, checkLoginThrottle, recordLoginFailure, clearLoginFailures,
 } from './auth.js';
 import * as db from './db.js';
 import { HttpError } from './db.js';
+import { settings, checkEnv } from './config.js';
 
 const JSON_HEADERS = {
   'Content-Type': 'application/json; charset=utf-8',
@@ -36,9 +37,9 @@ export default {
       return env.ASSETS.fetch(request);
     }
 
-    // 配置缺失时给出明确提示，而不是抛一个看不懂的运行时错误
-    if (!env.DB) return fail(500, '未绑定 D1 数据库，请检查 wrangler.jsonc 的 d1_databases 配置');
-    if (!env.SESSION_SECRET) return fail(500, '未配置 SESSION_SECRET，请执行 wrangler secret put SESSION_SECRET');
+    // 配置缺失时直接说清楚该去哪里配什么，而不是抛一个看不懂的运行时错误
+    const configError = checkEnv(env);
+    if (configError) return fail(500, configError);
 
     try {
       const response = await route(request, env, url);
@@ -60,7 +61,10 @@ async function route(request, env, url) {
 
   if (path === '/api/public/site' && method === 'GET') {
     const site = await db.publicSite(env.DB);
-    return json({ site }, 200, { 'Cache-Control': 'public, max-age=60' });
+    const maxAge = settings(env).publicCache;
+    return json({ site }, 200, {
+      'Cache-Control': maxAge > 0 ? `public, max-age=${maxAge}` : 'no-store',
+    });
   }
 
   // ---- 会话 ----
@@ -148,14 +152,12 @@ async function route(request, env, url) {
 }
 
 async function login(request, env, secure) {
-  if (!env.ADMIN_PASSWORD) {
-    return fail(500, '未配置 ADMIN_PASSWORD，请执行 wrangler secret put ADMIN_PASSWORD');
-  }
+  const { sessionTtl, loginWindow } = settings(env);
 
   const ip = clientIp(request);
   const throttle = await checkLoginThrottle(env, ip);
   if (throttle.blocked) {
-    return fail(429, '尝试次数过多，请 15 分钟后再试');
+    return fail(429, `尝试次数过多，请 ${Math.round(loginWindow / 60000)} 分钟后再试`);
   }
 
   const body = await readJson(request).catch(() => ({}));
@@ -167,8 +169,8 @@ async function login(request, env, secure) {
 
   await clearLoginFailures(env, ip);
   const token = await issueToken(env);
-  return json({ ok: true, expiresIn: SESSION_TTL }, 200, {
-    'Set-Cookie': sessionCookie(token, { secure }),
+  return json({ ok: true, expiresIn: sessionTtl }, 200, {
+    'Set-Cookie': sessionCookie(token, { secure, ttl: sessionTtl }),
   });
 }
 

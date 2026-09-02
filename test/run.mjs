@@ -349,6 +349,83 @@ section('错误处理');
   check('缺少 SESSION_SECRET 时给出明确提示', noSecret.status === 500);
 }
 
+// ---------------------------------------------------------------- 环境变量
+
+section('环境变量自检');
+{
+  const cases = [
+    ['未绑定 D1', { ...env, DB: undefined }, /D1|Bindings/],
+    ['缺少 SESSION_SECRET', { ...env, SESSION_SECRET: '' }, /SESSION_SECRET/],
+    ['SESSION_SECRET 过短', { ...env, SESSION_SECRET: 'too-short' }, /过短/],
+    ['缺少 ADMIN_PASSWORD', { ...env, ADMIN_PASSWORD: '' }, /ADMIN_PASSWORD/],
+  ];
+  for (const [name, badEnv, pattern] of cases) {
+    const res = await worker.fetch(new Request('https://example.com/api/public/site'), badEnv, {});
+    const body = await res.json().catch(() => ({}));
+    check(`${name} → 500 且提示明确`, res.status === 500 && pattern.test(body.error || ''),
+      (body.error || '').slice(0, 36) + '…');
+  }
+}
+
+section('环境变量生效');
+{
+  // 会话时长
+  const shortTtl = { ...env, SESSION_TTL_HOURS: '1' };
+  const r1 = await worker.fetch(new Request('https://example.com/api/auth/login', {
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': '192.0.2.80' },
+    body: JSON.stringify({ password: 'test-password-123' }),
+  }), shortTtl, {});
+  const c1 = r1.headers.get('Set-Cookie') || '';
+  check('SESSION_TTL_HOURS=1 → Cookie Max-Age 3600', c1.includes('Max-Age=3600'), c1.match(/Max-Age=\d+/)?.[0]);
+  const body1 = await r1.json();
+  check('登录响应回报同一时长', body1.expiresIn === 3600, String(body1.expiresIn));
+
+  // 非法值回退默认
+  const badTtl = { ...env, SESSION_TTL_HOURS: '不是数字' };
+  const r2 = await worker.fetch(new Request('https://example.com/api/auth/login', {
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': '192.0.2.81' },
+    body: JSON.stringify({ password: 'test-password-123' }),
+  }), badTtl, {});
+  check('非法值回退到默认 8 小时', (r2.headers.get('Set-Cookie') || '').includes('Max-Age=28800'));
+
+  // 越界值被钳制
+  const hugeTtl = { ...env, SESSION_TTL_HOURS: '99999' };
+  const r3 = await worker.fetch(new Request('https://example.com/api/auth/login', {
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': '192.0.2.82' },
+    body: JSON.stringify({ password: 'test-password-123' }),
+  }), hugeTtl, {});
+  check('越界值被钳制到上限 720 小时', (r3.headers.get('Set-Cookie') || '').includes(`Max-Age=${720 * 3600}`));
+
+  // 门户缓存时长
+  const cached = await worker.fetch(new Request('https://example.com/api/public/site'),
+    { ...env, PUBLIC_CACHE_SECONDS: '300' }, {});
+  check('PUBLIC_CACHE_SECONDS 生效', (cached.headers.get('Cache-Control') || '').includes('max-age=300'),
+    cached.headers.get('Cache-Control'));
+
+  const noCache = await worker.fetch(new Request('https://example.com/api/public/site'),
+    { ...env, PUBLIC_CACHE_SECONDS: '0' }, {});
+  check('设为 0 时改为不缓存', (noCache.headers.get('Cache-Control') || '').includes('no-store'),
+    noCache.headers.get('Cache-Control'));
+
+  // 失败次数上限
+  const strict = { ...env, LOGIN_MAX_FAILS: '3', LOGIN_WINDOW_MINUTES: '30' };
+  const ip = '192.0.2.99';
+  let blockedAt = null;
+  for (let i = 1; i <= 6; i++) {
+    const r = await worker.fetch(new Request('https://example.com/api/auth/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': ip },
+      body: JSON.stringify({ password: '错' }),
+    }), strict, {});
+    if (r.status === 429) {
+      blockedAt = i;
+      const msg = (await r.json()).error;
+      check('429 提示里的分钟数取自变量', /30 分钟/.test(msg), msg);
+      break;
+    }
+  }
+  check('LOGIN_MAX_FAILS=3 时第 4 次即拦截', blockedAt === 4, blockedAt ? `第 ${blockedAt} 次` : '未触发');
+}
+
 // ---------------------------------------------------------------- 结果
 
 console.log('\n=== 结果 ===');

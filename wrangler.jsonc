@@ -4,29 +4,35 @@
   "main": "src/index.js",
   "compatibility_date": "2026-08-25",
 
-  // 静态站点（门户与后台界面）直接由边缘返回；
-  // 只有 /api/* 交给 Worker 处理，其余路径命中静态资源就不会唤醒 Worker。
+  // 静态站点（门户与后台界面）由边缘直接返回；
+  // 只有 /api/* 会唤醒 Worker，其余路径命中静态资源就不进代码。
   "assets": {
     "directory": "./public/",
     "binding": "ASSETS",
     "run_worker_first": ["/api/*"]
   },
 
+  // D1 数据库绑定。
+  // 这里故意不写 database_id：首次 `wrangler deploy` 时 Wrangler 会自动创建数据库、
+  // 完成绑定，并把 database_id 回填到本文件。也可以先用 `npm run db:create` 手动创建。
+  // 若在 Cloudflare 控制台手动建库，把控制台给出的 ID 填成 "database_id": "..." 即可。
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "partnerrealm",
-      // 部署前先执行 `npm run db:create`，把返回的 database_id 替换到这里
-      "database_id": "00000000-0000-0000-0000-000000000000",
       "migrations_dir": "./migrations"
     }
   ],
 
+  // 保留在 Cloudflare 控制台里设置的环境变量，部署时不覆盖。
+  // 所有可调参数都不写在本文件，改到控制台 → Settings → Variables and Secrets：
+  //   Secret 类型（必填）：ADMIN_PASSWORD、SESSION_SECRET
+  //   Text   类型（可选）：SESSION_TTL_HOURS、LOGIN_MAX_FAILS、
+  //                        LOGIN_WINDOW_MINUTES、PUBLIC_CACHE_SECONDS
+  // 留空则用 src/config.js 里的默认值。
+  "keep_vars": true,
+
   "observability": {
     "enabled": true
   }
-
-  // 机密通过 `wrangler secret put` 配置，不写进本文件：
-  //   ADMIN_PASSWORD  后台登录口令
-  //   SESSION_SECRET  会话签名密钥（随机长字符串）
 }
