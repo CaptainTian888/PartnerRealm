@@ -114,11 +114,49 @@ body.portal {
 
 .hero__inner {
   position: relative;
+  display: grid;
+  grid-template-columns: 1fr min(42%, 320px);
+  grid-template-areas:
+    "eyebrow logo"
+    "title logo"
+    "subtitle logo"
+    "actions logo"
+    "stats stats";
+  gap: 0 var(--sp-7);
+  align-items: center;
   padding-block: var(--sp-9);
   color: var(--white);
 }
 
+/* 图形标是深蓝配金色，直接压在深蓝首屏上深色笔画会糊掉，
+   所以垫一层柔光把它从背景里托出来 */
+.hero__logo {
+  grid-area: logo;
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  object-fit: contain;
+  justify-self: center;
+  padding: var(--sp-5);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 45%,
+      rgba(255, 255, 255, 0.94) 0%,
+      rgba(255, 255, 255, 0.88) 42%,
+      rgba(226, 238, 250, 0.42) 66%,
+      rgba(226, 238, 250, 0) 78%);
+  filter: drop-shadow(0 18px 48px rgba(4, 12, 26, 0.45));
+  animation: heroLogoIn 0.9s var(--ease) both;
+}
+
+@keyframes heroLogoIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.94); }
+  to   { opacity: 1; transform: none; }
+}
+
 .hero__eyebrow {
+  grid-area: eyebrow;
   display: inline-block;
   margin-bottom: var(--sp-4);
   padding: 0.35em 1em;
@@ -132,16 +170,18 @@ body.portal {
 }
 
 .hero__title {
+  grid-area: title;
   font-family: var(--font-display);
   font-size: var(--fs-hero);
   font-weight: 800;
-  line-height: 1.12;
+  line-height: 1.1;
   letter-spacing: -0.02em;
-  max-width: 14ch;
-  margin-bottom: var(--sp-5);
+  max-width: none;
+  margin-bottom: var(--sp-4);
 }
 
 .hero__subtitle {
+  grid-area: subtitle;
   font-size: var(--fs-lg);
   color: rgba(255, 255, 255, 0.72);
   max-width: 52ch;
@@ -150,6 +190,7 @@ body.portal {
 }
 
 .hero__actions {
+  grid-area: actions;
   display: flex;
   flex-wrap: wrap;
   gap: var(--sp-3);
@@ -179,6 +220,7 @@ body.portal {
 }
 
 .hero__stats {
+  grid-area: stats;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: var(--sp-5);
@@ -217,10 +259,6 @@ body.portal {
   padding-block: var(--sp-8);
 }
 
-.section--alt {
-  background: var(--ink-50);
-}
-
 .section--contact {
   padding-bottom: var(--sp-9);
 }
@@ -244,6 +282,87 @@ body.portal {
   font-size: var(--fs-md);
   color: var(--text-soft);
   line-height: 1.7;
+}
+
+.section--philosophy {
+  background:
+    radial-gradient(ellipse 70% 50% at 20% 0%, rgba(18, 168, 148, 0.1), transparent),
+    linear-gradient(165deg, var(--navy-950) 0%, var(--navy-900) 50%, var(--navy-800) 100%);
+  color: var(--white);
+}
+
+.section--philosophy .section__title {
+  color: var(--white);
+}
+
+.section--philosophy .section__subtitle {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ── 经营理念 ── */
+
+.creed {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+
+.creed__item {
+  display: flex;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  transition: background var(--t), border-color var(--t);
+}
+
+.creed__item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(18, 168, 148, 0.35);
+}
+
+.creed__char {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  color: var(--teal-300);
+  background: rgba(18, 168, 148, 0.15);
+  border: 1px solid rgba(18, 168, 148, 0.3);
+  border-radius: var(--radius);
+}
+
+.creed__body h3 {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: var(--sp-2);
+}
+
+.creed__body p {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.65;
+}
+
+.creed__statement {
+  max-width: 720px;
+  margin-inline: auto;
+  padding-top: var(--sp-6);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.7;
+  text-align: center;
 }
 
 /* ── 关于我们 ── */
@@ -309,247 +428,6 @@ body.portal {
   font-size: var(--fs-sm);
   color: var(--text-soft);
   line-height: 1.6;
-}
-
-/* ── 业务板块 ── */
-
-.cap-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--sp-5);
-}
-
-.cap-card {
-  position: relative;
-  padding: var(--sp-6);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  transition: transform var(--t), box-shadow var(--t), border-color var(--t);
-}
-
-.cap-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: transparent;
-}
-
-.cap-card__index {
-  display: block;
-  font-family: var(--font-display);
-  font-size: var(--fs-3xl);
-  font-weight: 800;
-  color: var(--ink-200);
-  line-height: 1;
-  margin-bottom: var(--sp-4);
-}
-
-.cap-card h3 {
-  font-size: var(--fs-lg);
-  font-weight: 600;
-  color: var(--ink-900);
-  margin-bottom: var(--sp-2);
-}
-
-.cap-card p {
-  font-size: var(--fs-sm);
-  color: var(--text-soft);
-  line-height: 1.7;
-}
-
-/* ── 合作伙伴 ── */
-
-.partner-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--sp-5);
-}
-
-.partner-card {
-  display: flex;
-  flex-direction: column;
-  padding: var(--sp-5);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  transition: box-shadow var(--t), border-color var(--t);
-}
-
-.partner-card:hover {
-  box-shadow: var(--shadow);
-  border-color: var(--border-strong);
-}
-
-.partner-card__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--sp-4);
-}
-
-.partner-card__logo {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--navy-100), var(--accent-soft));
-  color: var(--navy-700);
-  font-weight: 700;
-  font-size: var(--fs-md);
-}
-
-.partner-card h3 {
-  font-size: var(--fs-lg);
-  font-weight: 600;
-  color: var(--ink-900);
-  margin-bottom: var(--sp-1);
-}
-
-.partner-card__meta {
-  font-size: var(--fs-xs);
-  color: var(--text-faint);
-  margin-bottom: var(--sp-3);
-}
-
-.partner-card__intro {
-  flex: 1;
-  font-size: var(--fs-sm);
-  color: var(--text-soft);
-  line-height: 1.65;
-  margin-bottom: var(--sp-4);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.partner-card__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-2);
-  margin-bottom: var(--sp-4);
-}
-
-.partner-card__tags li {
-  padding: 0.2em 0.6em;
-  border-radius: var(--radius-pill);
-  background: var(--ink-50);
-  font-size: var(--fs-xs);
-  color: var(--text-soft);
-}
-
-.partner-card__foot {
-  display: flex;
-  justify-content: space-between;
-  padding-top: var(--sp-3);
-  border-top: 1px solid var(--border);
-  font-size: var(--fs-xs);
-  color: var(--text-faint);
-}
-
-/* ── 项目列表 ── */
-
-.project-list {
-  display: grid;
-  gap: var(--sp-4);
-}
-
-.project-row {
-  padding: var(--sp-5);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  transition: box-shadow var(--t);
-}
-
-.project-row:hover {
-  box-shadow: var(--shadow);
-}
-
-.project-row__head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--sp-4);
-  margin-bottom: var(--sp-3);
-}
-
-.project-row__code {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  color: var(--text-faint);
-  margin-bottom: 2px;
-}
-
-.project-row h3 {
-  font-size: var(--fs-md);
-  font-weight: 600;
-  color: var(--ink-900);
-}
-
-.project-row__partner {
-  font-size: var(--fs-sm);
-  color: var(--text-faint);
-  margin-top: 2px;
-}
-
-.project-row__desc {
-  font-size: var(--fs-sm);
-  color: var(--text-soft);
-  line-height: 1.65;
-  margin-bottom: var(--sp-4);
-}
-
-.project-row__meters {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sp-5);
-  margin-bottom: var(--sp-4);
-}
-
-.meter__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: var(--sp-2);
-  font-size: var(--fs-xs);
-  color: var(--text-faint);
-}
-
-.meter__head b {
-  font-family: var(--font-mono);
-  font-size: var(--fs-sm);
-  color: var(--text);
-}
-
-.meter__track {
-  height: 6px;
-  background: var(--ink-100);
-  border-radius: var(--radius-pill);
-  overflow: hidden;
-}
-
-.meter__track > i {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--navy-500), var(--accent));
-  transition: width var(--t-slow);
-}
-
-.meter__track--alt > i {
-  background: linear-gradient(90deg, var(--ink-300), var(--ink-400));
-}
-
-.project-row__foot {
-  display: flex;
-  justify-content: space-between;
-  padding-top: var(--sp-3);
-  border-top: 1px solid var(--border);
-  font-size: var(--fs-xs);
-  color: var(--text-faint);
 }
 
 /* ── 联系我们 ── */
@@ -626,6 +504,20 @@ body.portal {
   gap: var(--sp-3);
 }
 
+.site-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.site-footer__brand img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
 .site-footer a {
   color: rgba(255, 255, 255, 0.7);
 }
@@ -656,6 +548,40 @@ body.portal {
 /* ── 响应式 ── */
 
 @media (max-width: 900px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "logo"
+      "eyebrow"
+      "title"
+      "subtitle"
+      "actions"
+      "stats";
+    text-align: center;
+  }
+
+  .hero__logo {
+    max-width: 220px;
+    margin-bottom: var(--sp-4);
+  }
+
+  .hero__eyebrow {
+    justify-self: center;
+  }
+
+  .hero__actions {
+    justify-content: center;
+  }
+
+  .hero__subtitle {
+    max-width: none;
+    margin-inline: auto;
+  }
+
+  .creed {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .about {
     grid-template-columns: 1fr;
   }
@@ -663,10 +589,6 @@ body.portal {
   .contact-card {
     grid-template-columns: 1fr;
     padding: var(--sp-6);
-  }
-
-  .project-row__meters {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -712,6 +634,12 @@ body.portal {
 
   .hero__stats {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .creed {
+    grid-template-columns: 1fr;
   }
 }
 

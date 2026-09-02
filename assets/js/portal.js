@@ -1,33 +1,49 @@
 /** 稳链同创 — 对外门户页渲染 */
 import { store } from './store.js';
-import { DICT, labelOf, toneOf } from './config.js';
-import { $, $$, esc, fmtDate, periodProgress, money } from './util.js';
+import { $, $$, esc } from './util.js';
 
 async function boot() {
+  let site;
   try {
     // 门户展示仓库线上数据，不叠加后台草稿
     await store.load({ withDraft: false });
+    site = store.get('site');
   } catch (err) {
     console.error(err);
-    document.querySelector('#main').insertAdjacentHTML(
+    $('#main').insertAdjacentHTML(
       'afterbegin',
       `<div class="container"><p class="load-error">数据加载失败：${esc(err.message)}</p></div>`
     );
     return;
   }
 
-  const site = store.get('site');
-  document.title = `${site.brand.name} | 合作伙伴管理平台`;
+  document.title = `${site.brand.legalName || site.brand.name} | ${site.brand.name}`;
 
+  applyBrand(site);
   bindText(site);
   renderStats(site);
   renderAbout(site);
-  renderCapabilities(site);
-  renderPartners();
-  renderProjects();
+  renderPhilosophy(site);
   renderContact(site);
   initNav();
   initReveal();
+}
+
+/** logo 路径可在后台改，这里覆盖 HTML 里的默认值 */
+function applyBrand(site) {
+  const mark = site.brand.logoMark;
+  const full = site.brand.logo;
+  if (mark) {
+    $('#brandLogo').src = mark;
+    $$('.site-footer__brand img').forEach((img) => { img.src = mark; });
+  }
+  // 首屏用图形标：完整组合标自带「稳链同创」字样，会和 h1 主标题重复
+  if (mark) $('#heroLogo').src = mark;
+
+  $('#brandLogo').alt = site.brand.name || '';
+
+  const icon = document.querySelector('link[rel="icon"]');
+  if (icon && site.brand.favicon) icon.href = site.brand.favicon;
 }
 
 /** 把 data-bind="a.b.c" 的节点填上 site.json 对应的值 */
@@ -49,7 +65,10 @@ function bindText(site) {
 }
 
 function renderStats(site) {
-  $('#heroStats').innerHTML = (site.stats || [])
+  const stats = site.stats || [];
+  const host = $('#heroStats');
+  if (!stats.length) { host.remove(); return; }
+  host.innerHTML = stats
     .map(
       (s) => `
       <li class="stat">
@@ -63,6 +82,12 @@ function renderStats(site) {
 
 function animateCounters() {
   const nodes = $$('.stat__value[data-count]');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    nodes.forEach((n) => {
+      n.firstChild.nodeValue = Number(n.dataset.count).toLocaleString('zh-CN');
+    });
+    return;
+  }
   const io = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       if (!entry.isIntersecting) continue;
@@ -77,14 +102,14 @@ function countUp(node, target) {
   const suffix = node.querySelector('em');
   const duration = 1100;
   const start = performance.now();
+  node.textContent = '0';
+  if (suffix) node.append(suffix);
   function step(now) {
     const p = Math.min(1, (now - start) / duration);
     const eased = 1 - Math.pow(1 - p, 3);
     node.firstChild.nodeValue = Math.round(target * eased).toLocaleString('zh-CN');
     if (p < 1) requestAnimationFrame(step);
   }
-  node.textContent = '0';
-  if (suffix) node.append(suffix);
   requestAnimationFrame(step);
 }
 
@@ -104,98 +129,35 @@ function renderAbout(site) {
     .join('');
 }
 
-function renderCapabilities(site) {
-  $('#capGrid').innerHTML = (site.capabilities.items || [])
+/** 经营理念：品牌名四个字各作一条准则 */
+function renderPhilosophy(site) {
+  const p = site.philosophy || {};
+  $('#creedList').innerHTML = (p.items || [])
     .map(
-      (c, i) => `
-      <li class="cap-card reveal">
-        <span class="cap-card__index">${String(i + 1).padStart(2, '0')}</span>
-        <h3>${esc(c.title)}</h3>
-        <p>${esc(c.desc)}</p>
+      (item, i) => `
+      <li class="creed__item reveal">
+        <span class="creed__char" aria-hidden="true">${esc(item.char || String(i + 1))}</span>
+        <div class="creed__body">
+          <h3>${esc(item.title)}</h3>
+          <p>${esc(item.desc)}</p>
+        </div>
       </li>`
     )
     .join('');
-}
 
-function renderPartners() {
-  const partners = store.list('partners').filter((p) => p.visibleOnPortal !== false);
-  const host = $('#partnerGrid');
-  if (!partners.length) {
-    host.innerHTML = '<li class="empty">暂无公开展示的合作伙伴</li>';
-    return;
-  }
-  host.innerHTML = partners
-    .map((p) => {
-      const projectCount = store.list('projects').filter((x) => x.partnerId === p.id).length;
-      return `
-      <li class="partner-card reveal">
-        <div class="partner-card__top">
-          <span class="partner-card__logo" aria-hidden="true">${esc((p.shortName || p.name).slice(0, 2))}</span>
-          <span class="tag tag--${toneOf(DICT.partnerStatus, p.status)}">${esc(labelOf(DICT.partnerStatus, p.status))}</span>
-        </div>
-        <h3>${esc(p.shortName || p.name)}</h3>
-        <p class="partner-card__meta">${esc(p.type)} · ${esc(p.industry)} · ${esc(p.region)}</p>
-        <p class="partner-card__intro">${esc(p.intro)}</p>
-        <ul class="partner-card__tags">${(p.tags || []).map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
-        <footer class="partner-card__foot">
-          <span>合作起始 ${fmtDate(p.since)}</span>
-          <span>${projectCount} 个项目</span>
-        </footer>
-      </li>`;
-    })
-    .join('');
-}
-
-function renderProjects() {
-  const shown = store
-    .list('projects')
-    .filter((p) => ['planning', 'ongoing', 'delivering'].includes(p.status))
-    .sort((a, b) => (b.startDate || '').localeCompare(a.startDate || ''));
-  const host = $('#projectList');
-  if (!shown.length) {
-    host.innerHTML = '<li class="empty">暂无进行中的项目</li>';
-    return;
-  }
-  host.innerHTML = shown
-    .map((p) => {
-      const cycle = periodProgress(p.startDate, p.endDate);
-      return `
-      <li class="project-row reveal">
-        <div class="project-row__head">
-          <div>
-            <span class="project-row__code">${esc(p.code)}</span>
-            <h3>${esc(p.name)}</h3>
-            <p class="project-row__partner">合作方 ${esc(store.partnerName(p.partnerId))}</p>
-          </div>
-          <span class="tag tag--${toneOf(DICT.projectStatus, p.status)}">${esc(labelOf(DICT.projectStatus, p.status))}</span>
-        </div>
-        <p class="project-row__desc">${esc(p.desc)}</p>
-        <div class="project-row__meters">
-          <div class="meter">
-            <div class="meter__head"><span>项目进度</span><b>${Number(p.progress) || 0}%</b></div>
-            <div class="meter__track"><i style="width:${Math.max(0, Math.min(100, Number(p.progress) || 0))}%"></i></div>
-          </div>
-          <div class="meter">
-            <div class="meter__head"><span>周期已过</span><b>${cycle === null ? '—' : cycle + '%'}</b></div>
-            <div class="meter__track meter__track--alt"><i style="width:${cycle === null ? 0 : cycle}%"></i></div>
-          </div>
-        </div>
-        <footer class="project-row__foot">
-          <span>周期 ${fmtDate(p.startDate)} → ${fmtDate(p.endDate)}</span>
-          <span>规模 ${money(p.budget, p.currency)}</span>
-        </footer>
-      </li>`;
-    })
-    .join('');
+  const statement = $('#creedStatement');
+  if (p.statement) statement.textContent = p.statement;
+  else statement.remove();
 }
 
 function renderContact(site) {
   const c = site.contact;
   const items = [
+    { label: '公司主体', value: c.company },
     { label: '合作邮箱', value: c.email, href: c.email ? `mailto:${c.email}` : '' },
-    { label: '联系电话', value: c.phone, href: '' },
-    { label: '办公地址', value: c.address, href: '' },
-    { label: '工作时间', value: c.workTime, href: '' },
+    { label: '联系电话', value: c.phone },
+    { label: '办公地址', value: c.address },
+    { label: '工作时间', value: c.workTime },
   ].filter((x) => x.value);
 
   $('#contactList').innerHTML = items

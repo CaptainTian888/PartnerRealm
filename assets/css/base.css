@@ -122,17 +122,10 @@ button {
   color: inherit;
 }
 
-.brand__mark {
-  display: grid;
-  place-items: center;
+.brand__logo {
   width: 40px;
   height: 40px;
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--navy-700), var(--accent));
-  color: var(--white);
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: var(--fs-lg);
+  object-fit: contain;
   flex-shrink: 0;
 }
 

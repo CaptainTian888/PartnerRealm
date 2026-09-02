@@ -34,18 +34,12 @@
   40%, 80% { transform: translateX(8px); }
 }
 
-.gate__mark {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  margin: 0 auto var(--sp-5);
-  border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, var(--navy-700), var(--accent));
-  color: var(--white);
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: var(--fs-xl);
+.gate__logo {
+  display: block;
+  width: min(180px, 72%);
+  height: auto;
+  margin: 0 auto var(--sp-4);
+  object-fit: contain;
 }
 
 .gate__card h1 {
@@ -54,6 +48,13 @@
   font-weight: 700;
   color: var(--ink-900);
   margin-bottom: var(--sp-2);
+}
+
+.gate__company {
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+  line-height: 1.5;
+  margin-bottom: var(--sp-4);
 }
 
 .gate__hint {
@@ -147,6 +148,56 @@
   font-style: normal;
   font-size: var(--fs-xs);
   color: rgba(255, 255, 255, 0.45);
+}
+
+.sidebar__brand .brand__logo {
+  width: 36px;
+  height: 36px;
+}
+
+/* ── 站点标识预览 ── */
+
+.logo-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-5);
+}
+
+.logo-preview figure {
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.logo-preview__light {
+  padding: var(--sp-5);
+  background: var(--white);
+  text-align: center;
+}
+
+.logo-preview__dark {
+  padding: var(--sp-5);
+  background: var(--navy-900);
+  text-align: center;
+}
+
+.logo-preview img {
+  width: min(100%, 200px);
+  height: auto;
+  margin-inline: auto;
+  object-fit: contain;
+}
+
+.logo-preview figcaption {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+}
+
+.logo-preview__dark figcaption {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .sidebar__nav {
@@ -1126,6 +1177,10 @@
 }
 
 @media (max-width: 768px) {
+  .logo-preview {
+    grid-template-columns: 1fr;
+  }
+
   .shell {
     grid-template-columns: 1fr;
   }

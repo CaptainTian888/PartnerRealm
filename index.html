@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>稳链同创 | 合作伙伴管理平台</title>
-<meta name="description" content="稳链同创 — 合作伙伴管理平台，统一管理伙伴档案、项目周期、签约记录与资金往来。">
+<title>稳链投资控股（海南）有限公司 | 稳链同创</title>
+<meta name="description" content="稳链投资控股（海南）有限公司 —— 以长期主义经营伙伴关系的产业投资控股平台。">
 <meta name="theme-color" content="#0b1f3a">
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/logo-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -21,18 +22,16 @@
 <header class="site-header" id="siteHeader">
   <div class="container site-header__inner">
     <a class="brand" href="index.html">
-      <span class="brand__mark" aria-hidden="true">稳</span>
+      <img class="brand__logo" id="brandLogo" src="assets/img/logo-mark.png" alt="稳链同创" width="40" height="40">
       <span class="brand__text">
         <strong data-bind="brand.name">稳链同创</strong>
-        <em data-bind="brand.tagline">稳固供应链 · 同创新价值</em>
+        <em data-bind="brand.legalName">稳链投资控股（海南）有限公司</em>
       </span>
     </a>
 
     <nav class="site-nav" id="siteNav" aria-label="主导航">
       <a href="#about">关于我们</a>
-      <a href="#capabilities">业务板块</a>
-      <a href="#partners">合作伙伴</a>
-      <a href="#projects">项目进展</a>
+      <a href="#philosophy">经营理念</a>
       <a href="#contact">联系我们</a>
     </nav>
 
@@ -50,12 +49,13 @@
   <section class="hero">
     <div class="hero__bg" aria-hidden="true"></div>
     <div class="container hero__inner">
+      <img class="hero__logo" id="heroLogo" src="assets/img/logo-mark.png" alt="" width="256" height="256" aria-hidden="true">
       <p class="hero__eyebrow" data-bind="hero.eyebrow"></p>
       <h1 class="hero__title" data-bind="hero.title"></h1>
       <p class="hero__subtitle" data-bind="hero.subtitle"></p>
       <div class="hero__actions">
-        <a class="btn btn--primary" id="heroPrimary" href="admin.html"></a>
-        <a class="btn btn--ghost" id="heroSecondary" href="#about"></a>
+        <a class="btn btn--primary" id="heroPrimary" href="#philosophy"></a>
+        <a class="btn btn--ghost" id="heroSecondary" href="#contact"></a>
       </div>
       <ul class="hero__stats" id="heroStats"></ul>
     </div>
@@ -74,33 +74,14 @@
     </div>
   </section>
 
-  <section class="section section--alt" id="capabilities">
+  <section class="section section--philosophy" id="philosophy">
     <div class="container">
       <header class="section__head">
-        <h2 class="section__title" data-bind="capabilities.title"></h2>
-        <p class="section__subtitle" data-bind="capabilities.subtitle"></p>
+        <h2 class="section__title" data-bind="philosophy.title"></h2>
+        <p class="section__subtitle" data-bind="philosophy.subtitle"></p>
       </header>
-      <ul class="cap-grid" id="capGrid"></ul>
-    </div>
-  </section>
-
-  <section class="section" id="partners">
-    <div class="container">
-      <header class="section__head">
-        <h2 class="section__title">合作伙伴</h2>
-        <p class="section__subtitle">与我们保持长期协作的核心伙伴</p>
-      </header>
-      <ul class="partner-grid" id="partnerGrid"></ul>
-    </div>
-  </section>
-
-  <section class="section section--alt" id="projects">
-    <div class="container">
-      <header class="section__head">
-        <h2 class="section__title">项目进展</h2>
-        <p class="section__subtitle">正在推进中的合作项目与所处阶段</p>
-      </header>
-      <ul class="project-list" id="projectList"></ul>
+      <ul class="creed" id="creedList"></ul>
+      <blockquote class="creed__statement" id="creedStatement"></blockquote>
     </div>
   </section>
 
@@ -120,6 +101,10 @@
 
 <footer class="site-footer">
   <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="assets/img/logo-mark.png" alt="" width="32" height="32" aria-hidden="true">
+      <span data-bind="brand.legalName"></span>
+    </div>
     <p data-bind="footer.copyright"></p>
     <p class="site-footer__links">
       <a href="admin.html">管理后台</a>
