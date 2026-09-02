@@ -885,85 +885,13 @@
   gap: var(--sp-1);
 }
 
-/* ── 部署 ── */
-
-.deploy-token,
 .deploy-body,
 .deploy-help {
   font-size: var(--fs-sm);
 }
 
-.deploy-token__status {
-  padding: var(--sp-3);
-  border-radius: var(--radius-sm);
-  background: var(--ink-50);
-  margin-bottom: var(--sp-3);
-}
-
-.deploy-token__status.is-ok {
-  background: var(--ok-soft);
-  color: var(--ok);
-}
-
-.deploy-token__status.is-bad {
-  background: var(--bad-soft);
-  color: var(--bad);
-}
-
-.deploy-token__form {
-  display: grid;
-  gap: var(--sp-3);
-}
-
-.deploy-token__ops {
-  margin-top: var(--sp-3);
-}
-
-.change-list {
-  display: grid;
-  gap: var(--sp-2);
-  margin-bottom: var(--sp-4);
-}
-
-.change {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-  padding: var(--sp-3);
-  background: var(--ink-50);
-  border-radius: var(--radius-sm);
-  font-size: var(--fs-sm);
-}
-
-.change__size {
-  margin-left: auto;
-  font-size: var(--fs-xs);
-  color: var(--text-faint);
-  font-family: var(--font-mono);
-}
-
 .deploy-actions {
   margin-top: var(--sp-4);
-}
-
-.deploy-log {
-  margin-top: var(--sp-4);
-  padding: var(--sp-4);
-  background: var(--ink-900);
-  border-radius: var(--radius);
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  color: rgba(255, 255, 255, 0.75);
-  max-height: 240px;
-  overflow-y: auto;
-}
-
-.deploy-log li {
-  padding: 2px 0;
-}
-
-.deploy-log li.is-bad {
-  color: #ff8a80;
 }
 
 .deploy-help ol {

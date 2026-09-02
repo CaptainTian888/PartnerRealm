@@ -1,7 +1,8 @@
 /** 后台 — 合作伙伴 */
 import { store } from '../store.js';
+import { write } from './actions.js';
 import { DICT, labelOf, toneOf } from '../config.js';
-import { esc, el, uid, today, fmtDate, money, toast } from '../util.js';
+import { esc, el, today, fmtDate, money } from '../util.js';
 import { dataTable, toolbar, openForm, confirmDialog, tag, rowActions, panel, detailDialog } from './ui.js';
 
 const filters = { q: '', type: '', tier: '', status: '' };
@@ -139,14 +140,10 @@ async function editPartner(partner, done) {
   });
   if (!result) return;
 
-  if (isNew) {
-    store.list('partners').push({ id: uid('p'), ...result });
-  } else {
-    Object.assign(partner, result);
-  }
-  store.markDirty('partners');
-  toast(isNew ? '伙伴已添加' : '伙伴信息已更新', 'ok');
-  done();
+  await write(
+    () => store.save('partners', isNew ? result : { ...result, id: partner.id }),
+    isNew ? '伙伴已添加' : '伙伴信息已更新'
+  );
 }
 
 async function removePartner(partner, done) {
@@ -158,17 +155,14 @@ async function removePartner(partner, done) {
   const ok = await confirmDialog({
     title: `删除「${partner.shortName || partner.name}」`,
     message: linked
-      ? `该伙伴还关联着 ${projects.length} 个项目、${contracts.length} 份合同、${txs.length} 笔资金记录。删除后这些记录会失去伙伴归属，建议改为把状态设为「已终止」。`
+      ? `该伙伴还关联着 ${projects.length} 个项目、${contracts.length} 份合同、${txs.length} 笔资金记录，` +
+        '这些记录必须先处理掉才能删除伙伴。更常见的做法是把状态改为「已终止」保留历史。'
       : '删除后无法恢复，确定继续吗？',
-    confirmText: '仍然删除',
+    confirmText: linked ? '仍然尝试删除' : '删除',
   });
   if (!ok) return;
 
-  const list = store.list('partners');
-  list.splice(list.indexOf(partner), 1);
-  store.markDirty('partners');
-  toast('伙伴已删除', 'warn');
-  done();
+  await write(() => store.remove('partners', partner.id), '伙伴已删除');
 }
 
 function showDetail(partner) {

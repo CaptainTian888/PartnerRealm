@@ -1,7 +1,8 @@
 /** 后台 — 签约管理 */
 import { store } from '../store.js';
+import { write } from './actions.js';
 import { DICT, labelOf, toneOf } from '../config.js';
-import { esc, el, uid, today, fmtDate, moneyExact, money, daysBetween, toast } from '../util.js';
+import { esc, el, today, fmtDate, moneyExact, money, daysBetween } from '../util.js';
 import { dataTable, toolbar, openForm, confirmDialog, tag, rowActions, panel, detailDialog, statCards } from './ui.js';
 
 const filters = { q: '', status: '', partnerId: '', type: '' };
@@ -157,12 +158,10 @@ async function editContract(contract, done) {
   });
   if (!result) return;
 
-  if (isNew) store.list('contracts').push({ id: uid('c'), ...result });
-  else Object.assign(contract, result);
-
-  store.markDirty('contracts');
-  toast(isNew ? '合同已添加' : '合同已更新', 'ok');
-  done();
+  await write(
+    () => store.save('contracts', isNew ? result : { ...result, id: contract.id }),
+    isNew ? '合同已添加' : '合同已更新'
+  );
 }
 
 async function removeContract(contract, done) {
@@ -170,16 +169,12 @@ async function removeContract(contract, done) {
   const ok = await confirmDialog({
     title: `删除合同「${contract.no}」`,
     message: txs.length
-      ? `该合同关联着 ${txs.length} 笔资金记录，删除后这些记录会失去合同归属。`
+      ? `该合同关联着 ${txs.length} 笔资金记录。删除合同后这些记录会保留，但不再归属任何合同。`
       : '删除后无法恢复，确定继续吗？',
-    confirmText: '仍然删除',
+    confirmText: '删除合同',
   });
   if (!ok) return;
-  const list = store.list('contracts');
-  list.splice(list.indexOf(contract), 1);
-  store.markDirty('contracts');
-  toast('合同已删除', 'warn');
-  done();
+  await write(() => store.remove('contracts', contract.id), '合同已删除');
 }
 
 function showDetail(contract) {

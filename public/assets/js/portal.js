@@ -1,13 +1,14 @@
 /** 稳链同创 — 对外门户页渲染 */
-import { store } from './store.js';
 import { $, $$, esc } from './util.js';
 
 async function boot() {
   let site;
   try {
-    // 门户展示仓库线上数据，不叠加后台草稿
-    await store.load({ withDraft: false });
-    site = store.get('site');
+    // 门户只取公开的站点文案；伙伴、项目、合同、资金都不在这个接口里
+    const res = await fetch('/api/public/site');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    site = (await res.json()).site;
+    if (!site || !site.brand) throw new Error('站点内容尚未初始化');
   } catch (err) {
     console.error(err);
     $('#main').insertAdjacentHTML(
@@ -151,12 +152,12 @@ function renderPhilosophy(site) {
 }
 
 function renderContact(site) {
-  const c = site.contact;
+  const c = site.contact || {};
   const items = [
     { label: '公司主体', value: c.company },
     { label: '合作邮箱', value: c.email, href: c.email ? `mailto:${c.email}` : '' },
-    { label: '联系电话', value: c.phone },
-    { label: '办公地址', value: c.address },
+    // 手机号去掉分隔符再拼 tel:，避免部分客户端拨号失败
+    { label: '联系电话', value: c.phone, href: c.phone ? `tel:${String(c.phone).replace(/[^\d+]/g, '')}` : '' },
     { label: '工作时间', value: c.workTime },
   ].filter((x) => x.value);
 

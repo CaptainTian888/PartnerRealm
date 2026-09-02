@@ -1,7 +1,8 @@
 /** 后台 — 资金往来 */
 import { store } from '../store.js';
+import { write } from './actions.js';
 import { DICT, labelOf, toneOf } from '../config.js';
-import { esc, el, uid, today, fmtDate, money, moneyExact, toast } from '../util.js';
+import { esc, el, today, fmtDate, money, moneyExact, toast } from '../util.js';
 import { dataTable, toolbar, openForm, confirmDialog, tag, rowActions, panel, statCards } from './ui.js';
 
 const filters = { q: '', direction: '', status: '', partnerId: '', year: '' };
@@ -137,12 +138,10 @@ async function editTx(tx, done) {
   });
   if (!result) return;
 
-  if (isNew) store.list('finance').push({ id: uid('f'), ...result });
-  else Object.assign(tx, result);
-
-  store.markDirty('finance');
-  toast(isNew ? '流水已登记' : '流水已更新', 'ok');
-  done();
+  await write(
+    () => store.save('finance', isNew ? result : { ...result, id: tx.id }),
+    isNew ? '流水已登记' : '流水已更新'
+  );
 }
 
 async function removeTx(tx, done) {
@@ -152,11 +151,7 @@ async function removeTx(tx, done) {
     confirmText: '删除',
   });
   if (!ok) return;
-  const list = store.list('finance');
-  list.splice(list.indexOf(tx), 1);
-  store.markDirty('finance');
-  toast('记录已删除', 'warn');
-  done();
+  await write(() => store.remove('finance', tx.id), '记录已删除');
 }
 
 function exportCsv(rows) {

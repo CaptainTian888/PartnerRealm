@@ -1,0 +1,32 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "partnerrealm",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-25",
+
+  // 静态站点（门户与后台界面）直接由边缘返回；
+  // 只有 /api/* 交给 Worker 处理，其余路径命中静态资源就不会唤醒 Worker。
+  "assets": {
+    "directory": "./public/",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "partnerrealm",
+      // 部署前先执行 `npm run db:create`，把返回的 database_id 替换到这里
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "./migrations"
+    }
+  ],
+
+  "observability": {
+    "enabled": true
+  }
+
+  // 机密通过 `wrangler secret put` 配置，不写进本文件：
+  //   ADMIN_PASSWORD  后台登录口令
+  //   SESSION_SECRET  会话签名密钥（随机长字符串）
+}

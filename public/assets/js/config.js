@@ -1,42 +1,8 @@
 /**
- * 稳链同创 — 全局配置
+ * 稳链同创 — 枚举与中文标签
  *
- * 仓库信息用于后台「一键部署」：后台把修改后的 data/*.json 通过 GitHub Contents API
- * 提交回本仓库，托管平台（Cloudflare Pages）监听到 push 后自动重新部署。
+ * 口令、会话与数据都在服务端（Worker + D1），这里不再有任何配置或凭证。
  */
-export const CONFIG = {
-  repo: {
-    owner: 'CaptainTian888',
-    name: 'PartnerRealm',
-    branch: 'main',
-    dataDir: 'data',
-  },
-
-  /**
-   * 管理后台口令的 SHA-256 摘要。默认口令：wenlian2026
-   * 更换口令：在浏览器控制台执行
-   *   crypto.subtle.digest('SHA-256', new TextEncoder().encode('新口令'))
-   *     .then(b => console.log([...new Uint8Array(b)].map(x => x.toString(16).padStart(2,'0')).join('')))
-   * 把输出替换到下面。
-   *
-   * 注意：这是纯静态站点，口令校验只能在浏览器里做，属于「防误入」而非「防攻击」。
-   * 真正的访问控制请在 Cloudflare Access / Pages 访问策略上配置，详见 README。
-   */
-  adminPasswordHash: '00d31c4481eafb5ef178c45aa14cbd83bc29a64e245c3247db0d4f0dbaf13efa',
-
-  /** 登录态有效期（毫秒），默认 8 小时 */
-  sessionTtl: 8 * 60 * 60 * 1000,
-
-  /** 数据文件清单：key 对应 store 中的数据集名 */
-  files: {
-    site: 'site.json',
-    org: 'org.json',
-    partners: 'partners.json',
-    projects: 'projects.json',
-    contracts: 'contracts.json',
-    finance: 'finance.json',
-  },
-};
 
 /** 枚举与中文标签 */
 export const DICT = {

@@ -1,0 +1,21 @@
+{
+  "name": "partnerrealm",
+  "version": "2.0.0",
+  "private": true,
+  "description": "稳链同创 · 合作伙伴管理平台（Cloudflare Workers + D1）",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create partnerrealm",
+    "db:migrate:local": "wrangler d1 migrations apply partnerrealm --local",
+    "db:migrate": "wrangler d1 migrations apply partnerrealm --remote",
+    "db:seed:build": "node scripts/build-seed.mjs",
+    "db:export": "wrangler d1 export partnerrealm --remote --output backup.sql",
+    "test": "node test/run.mjs",
+    "types": "wrangler types"
+  },
+  "devDependencies": {
+    "wrangler": "^4.128.0"
+  }
+}

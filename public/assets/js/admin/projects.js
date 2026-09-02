@@ -1,7 +1,8 @@
 /** 后台 — 项目管理（合作周期与里程碑） */
 import { store } from '../store.js';
+import { write } from './actions.js';
 import { DICT, labelOf, toneOf } from '../config.js';
-import { esc, el, uid, today, fmtDate, money, periodProgress, daysBetween, toast } from '../util.js';
+import { esc, el, uid, today, fmtDate, money, periodProgress, daysBetween } from '../util.js';
 import { dataTable, toolbar, openForm, confirmDialog, tag, rowActions, panel, detailDialog } from './ui.js';
 
 const filters = { q: '', status: '', partnerId: '' };
@@ -155,12 +156,10 @@ async function editProject(project, done) {
   result.milestones = (result.milestones || []).map((m) => ({ id: m.id || uid('ms'), ...m }));
   result.progress = Math.max(0, Math.min(100, Number(result.progress) || 0));
 
-  if (isNew) store.list('projects').push({ id: uid('prj'), ...result });
-  else Object.assign(project, result);
-
-  store.markDirty('projects');
-  toast(isNew ? '项目已创建' : '项目已更新', 'ok');
-  done();
+  await write(
+    () => store.save('projects', isNew ? result : { ...result, id: project.id }),
+    isNew ? '项目已创建' : '项目已更新'
+  );
 }
 
 async function removeProject(project, done) {
@@ -169,16 +168,12 @@ async function removeProject(project, done) {
   const ok = await confirmDialog({
     title: `删除项目「${project.name}」`,
     message: contracts.length || txs.length
-      ? `该项目关联着 ${contracts.length} 份合同、${txs.length} 笔资金记录，删除后这些记录会失去项目归属。`
+      ? `该项目关联着 ${contracts.length} 份合同、${txs.length} 笔资金记录。删除项目后这些记录会保留，但不再归属任何项目。`
       : '删除后无法恢复，确定继续吗？',
-    confirmText: '仍然删除',
+    confirmText: '删除项目',
   });
   if (!ok) return;
-  const list = store.list('projects');
-  list.splice(list.indexOf(project), 1);
-  store.markDirty('projects');
-  toast('项目已删除', 'warn');
-  done();
+  await write(() => store.remove('projects', project.id), '项目已删除');
 }
 
 function showDetail(project) {

@@ -1,3 +1,7 @@
 .DS_Store
 Thumbs.db
 node_modules/
+.wrangler/
+.dev.vars
+backup.sql
+worker-configuration.d.ts
