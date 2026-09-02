@@ -45,6 +45,35 @@ async function call(path, { method = 'GET', body, withCookie = true, headers = {
   return { status: res.status, data, res };
 }
 
+// ---------------------------------------------------------------- 空库自动初始化
+
+section('空库自动初始化（部署后首次访问）');
+{
+  // 完全空的数据库，一张表都没有 —— 模拟刚在 Cloudflare 建好 D1 的状态
+  const emptyEnv = {
+    DB: createTestDb([]),
+    ADMIN_PASSWORD: 'test-password-123',
+    SESSION_SECRET: 'unit-test-secret-key-long-enough-for-hmac',
+    ASSETS: { fetch: async () => new Response('', { status: 404 }) },
+  };
+
+  const res = await worker.fetch(new Request('https://example.com/api/public/site'), emptyEnv, {});
+  const body = await res.json();
+  check('首次访问自动建表并返回 200', res.status === 200, `实际 ${res.status}`);
+  check('站点文案已自动写入', !!(body.site && body.site.brand && body.site.brand.name), body.site?.brand?.name);
+  check('联系方式是最新的', body.site.contact.email === 'support@partnerrealm.com', body.site.contact.email);
+  check('电话是最新的', body.site.contact.phone === '18347348633', body.site.contact.phone);
+  check('已不含办公地址', body.site.contact.address === undefined);
+
+  // 再次访问不应重复写入
+  await worker.fetch(new Request('https://example.com/api/public/site'), emptyEnv, {});
+  const count = await emptyEnv.DB.prepare('SELECT COUNT(*) AS n FROM settings').first();
+  check('重复访问不产生重复数据', count.n === 7, `settings=${count.n}`);
+
+  const partners = await emptyEnv.DB.prepare('SELECT COUNT(*) AS n FROM partners').first();
+  check('业务数据也已初始化', partners.n === 5, `partners=${partners.n}`);
+}
+
 // ---------------------------------------------------------------- 公开接口
 
 section('门户公开接口');

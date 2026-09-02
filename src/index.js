@@ -42,6 +42,8 @@ export default {
     if (configError) return fail(500, configError);
 
     try {
+      // 空库时自动建表并写入初始数据，部署者不需要手动跑迁移
+      await db.ensureSchema(env.DB);
       const response = await route(request, env, url);
       return response || fail(404, '接口不存在');
     } catch (err) {

@@ -5,7 +5,33 @@
  * 与数据库的下划线列名在这里做一次映射，前端不需要感知表结构。
  */
 
+import { SCHEMA_STATEMENTS, SEED_STATEMENTS } from './schema.js';
+
 const now = () => new Date().toISOString();
+
+/**
+ * 首次访问时自动建表并写入初始数据，省掉手动执行迁移这一步。
+ *
+ * 每个 isolate 只检查一次；语句本身也都是幂等的
+ * （CREATE TABLE IF NOT EXISTS / INSERT OR IGNORE），
+ * 所以多个请求并发触发初始化也不会产生重复数据。
+ */
+let schemaChecked = false;
+
+export async function ensureSchema(db) {
+  if (schemaChecked) return;
+
+  const existing = await db
+    .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'settings'")
+    .first();
+
+  if (!existing) {
+    for (const stmt of SCHEMA_STATEMENTS) await db.prepare(stmt).run();
+    for (const stmt of SEED_STATEMENTS) await db.prepare(stmt).run();
+    console.log('数据库为空，已自动完成初始化');
+  }
+  schemaChecked = true;
+}
 
 /** 生成带前缀的短 id */
 export function uid(prefix) {

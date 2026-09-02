@@ -42,19 +42,19 @@ out('');
 out('-- 站点文案');
 for (const key of ['brand', 'hero', 'about', 'philosophy', 'stats', 'contact', 'footer']) {
   if (site[key] === undefined) continue;
-  out(`INSERT INTO settings (key, value, updated_at) VALUES (${s(key)}, ${s(JSON.stringify(site[key]))}, ${s(NOW)});`);
+  out(`INSERT OR IGNORE INTO settings (key, value, updated_at) VALUES (${s(key)}, ${s(JSON.stringify(site[key]))}, ${s(NOW)});`);
 }
 out('');
 
 // 部门与成员
 out('-- 组织架构');
 for (const d of org.departments) {
-  out(`INSERT INTO departments (id, parent_id, name, description, sort_order) VALUES (${s(d.id)}, ${q(d.parentId)}, ${s(d.name)}, ${s(d.desc)}, ${n(d.order)});`);
+  out(`INSERT OR IGNORE INTO departments (id, parent_id, name, description, sort_order) VALUES (${s(d.id)}, ${q(d.parentId)}, ${s(d.name)}, ${s(d.desc)}, ${n(d.order)});`);
 }
 out('');
 for (const d of org.departments) {
   (d.members || []).forEach((m, i) => {
-    out(`INSERT INTO members (id, department_id, name, title, email, phone, sort_order) VALUES (${s(m.id)}, ${s(d.id)}, ${s(m.name)}, ${s(m.title)}, ${s(m.email)}, ${s(m.phone)}, ${n(i)});`);
+    out(`INSERT OR IGNORE INTO members (id, department_id, name, title, email, phone, sort_order) VALUES (${s(m.id)}, ${s(d.id)}, ${s(m.name)}, ${s(m.title)}, ${s(m.email)}, ${s(m.phone)}, ${n(i)});`);
   });
 }
 out('');
@@ -62,9 +62,9 @@ out('');
 // 伙伴与联系人
 out('-- 合作伙伴');
 for (const p of partners) {
-  out(`INSERT INTO partners (id, name, short_name, type, tier, status, industry, region, website, since, owner_id, intro, tags, visible_on_portal, created_at, updated_at) VALUES (${s(p.id)}, ${s(p.name)}, ${s(p.shortName)}, ${s(p.type)}, ${s(p.tier)}, ${s(p.status)}, ${s(p.industry)}, ${s(p.region)}, ${s(p.website)}, ${s(p.since)}, ${q(p.owner)}, ${s(p.intro)}, ${jsonCol(p.tags)}, ${p.visibleOnPortal === false ? 0 : 1}, ${s(NOW)}, ${s(NOW)});`);
+  out(`INSERT OR IGNORE INTO partners (id, name, short_name, type, tier, status, industry, region, website, since, owner_id, intro, tags, visible_on_portal, created_at, updated_at) VALUES (${s(p.id)}, ${s(p.name)}, ${s(p.shortName)}, ${s(p.type)}, ${s(p.tier)}, ${s(p.status)}, ${s(p.industry)}, ${s(p.region)}, ${s(p.website)}, ${s(p.since)}, ${q(p.owner)}, ${s(p.intro)}, ${jsonCol(p.tags)}, ${p.visibleOnPortal === false ? 0 : 1}, ${s(NOW)}, ${s(NOW)});`);
   (p.contacts || []).forEach((c, i) => {
-    out(`INSERT INTO partner_contacts (id, partner_id, name, title, phone, email, sort_order) VALUES (${s(`${p.id}-c${i + 1}`)}, ${s(p.id)}, ${s(c.name)}, ${s(c.title)}, ${s(c.phone)}, ${s(c.email)}, ${n(i)});`);
+    out(`INSERT OR IGNORE INTO partner_contacts (id, partner_id, name, title, phone, email, sort_order) VALUES (${s(`${p.id}-c${i + 1}`)}, ${s(p.id)}, ${s(c.name)}, ${s(c.title)}, ${s(c.phone)}, ${s(c.email)}, ${n(i)});`);
   });
 }
 out('');
@@ -72,9 +72,9 @@ out('');
 // 项目与里程碑
 out('-- 项目');
 for (const p of projects) {
-  out(`INSERT INTO projects (id, code, name, partner_id, owner_id, status, start_date, end_date, progress, budget, currency, description, tags, created_at, updated_at) VALUES (${s(p.id)}, ${s(p.code)}, ${s(p.name)}, ${s(p.partnerId)}, ${q(p.owner)}, ${s(p.status)}, ${s(p.startDate)}, ${s(p.endDate)}, ${n(p.progress)}, ${n(p.budget)}, ${s(p.currency)}, ${s(p.desc)}, ${jsonCol(p.tags)}, ${s(NOW)}, ${s(NOW)});`);
+  out(`INSERT OR IGNORE INTO projects (id, code, name, partner_id, owner_id, status, start_date, end_date, progress, budget, currency, description, tags, created_at, updated_at) VALUES (${s(p.id)}, ${s(p.code)}, ${s(p.name)}, ${s(p.partnerId)}, ${q(p.owner)}, ${s(p.status)}, ${s(p.startDate)}, ${s(p.endDate)}, ${n(p.progress)}, ${n(p.budget)}, ${s(p.currency)}, ${s(p.desc)}, ${jsonCol(p.tags)}, ${s(NOW)}, ${s(NOW)});`);
   (p.milestones || []).forEach((m, i) => {
-    out(`INSERT INTO milestones (id, project_id, title, due_date, status, note, sort_order) VALUES (${s(m.id)}, ${s(p.id)}, ${s(m.title)}, ${s(m.date)}, ${s(m.status)}, ${s(m.note)}, ${n(i)});`);
+    out(`INSERT OR IGNORE INTO milestones (id, project_id, title, due_date, status, note, sort_order) VALUES (${s(m.id)}, ${s(p.id)}, ${s(m.title)}, ${s(m.date)}, ${s(m.status)}, ${s(m.note)}, ${n(i)});`);
   });
 }
 out('');
@@ -82,14 +82,14 @@ out('');
 // 合同
 out('-- 合同');
 for (const c of contracts) {
-  out(`INSERT INTO contracts (id, no, name, partner_id, project_id, type, status, amount, currency, sign_date, effective_date, expiry_date, our_signatory, partner_signatory, payment_terms, note, created_at, updated_at) VALUES (${s(c.id)}, ${s(c.no)}, ${s(c.name)}, ${s(c.partnerId)}, ${q(c.projectId)}, ${s(c.type)}, ${s(c.status)}, ${n(c.amount)}, ${s(c.currency)}, ${s(c.signDate)}, ${s(c.effectiveDate)}, ${s(c.expiryDate)}, ${q(c.ourSignatory)}, ${s(c.partnerSignatory)}, ${s(c.paymentTerms)}, ${s(c.note)}, ${s(NOW)}, ${s(NOW)});`);
+  out(`INSERT OR IGNORE INTO contracts (id, no, name, partner_id, project_id, type, status, amount, currency, sign_date, effective_date, expiry_date, our_signatory, partner_signatory, payment_terms, note, created_at, updated_at) VALUES (${s(c.id)}, ${s(c.no)}, ${s(c.name)}, ${s(c.partnerId)}, ${q(c.projectId)}, ${s(c.type)}, ${s(c.status)}, ${n(c.amount)}, ${s(c.currency)}, ${s(c.signDate)}, ${s(c.effectiveDate)}, ${s(c.expiryDate)}, ${q(c.ourSignatory)}, ${s(c.partnerSignatory)}, ${s(c.paymentTerms)}, ${s(c.note)}, ${s(NOW)}, ${s(NOW)});`);
 }
 out('');
 
 // 资金流水
 out('-- 资金流水');
 for (const t of transactions) {
-  out(`INSERT INTO transactions (id, date, direction, category, partner_id, project_id, contract_id, amount, currency, status, method, invoice_no, note, created_at, updated_at) VALUES (${s(t.id)}, ${s(t.date)}, ${s(t.direction)}, ${s(t.category)}, ${s(t.partnerId)}, ${q(t.projectId)}, ${q(t.contractId)}, ${n(t.amount)}, ${s(t.currency)}, ${s(t.status)}, ${s(t.method)}, ${s(t.invoiceNo)}, ${s(t.note)}, ${s(NOW)}, ${s(NOW)});`);
+  out(`INSERT OR IGNORE INTO transactions (id, date, direction, category, partner_id, project_id, contract_id, amount, currency, status, method, invoice_no, note, created_at, updated_at) VALUES (${s(t.id)}, ${s(t.date)}, ${s(t.direction)}, ${s(t.category)}, ${s(t.partnerId)}, ${q(t.projectId)}, ${q(t.contractId)}, ${n(t.amount)}, ${s(t.currency)}, ${s(t.status)}, ${s(t.method)}, ${s(t.invoiceNo)}, ${s(t.note)}, ${s(NOW)}, ${s(NOW)});`);
 }
 out('');
 
@@ -97,3 +97,65 @@ const target = path.join(ROOT, 'migrations', '0002_seed.sql');
 fs.writeFileSync(target, lines.join('\n'));
 console.log(`已生成 ${path.relative(ROOT, target)}`);
 console.log(`  站点区块 ${Object.keys(site).length} · 部门 ${org.departments.length} · 伙伴 ${partners.length} · 项目 ${projects.length} · 合同 ${contracts.length} · 流水 ${transactions.length}`);
+
+// ---------------------------------------------------------------- 生成 src/schema.js
+// Worker 首次访问时用它自动建表并写入初始数据，这样部署者不必手动跑迁移。
+
+/** 按分号切分 SQL，跳过单引号字符串内部的分号 */
+function splitStatements(sql) {
+  const out = [];
+  let buf = '';
+  let inString = false;
+  for (let i = 0; i < sql.length; i++) {
+    const ch = sql[i];
+    if (ch === "'") {
+      // 连续两个单引号是转义，不算字符串结束
+      if (inString && sql[i + 1] === "'") { buf += "''"; i++; continue; }
+      inString = !inString;
+      buf += ch;
+      continue;
+    }
+    if (ch === ';' && !inString) {
+      const stmt = stripComments(buf).trim();
+      if (stmt) out.push(stmt);
+      buf = '';
+      continue;
+    }
+    buf += ch;
+  }
+  const last = stripComments(buf).trim();
+  if (last) out.push(last);
+  return out;
+}
+
+/** 去掉整行的 -- 注释（字符串里不会出现 -- 开头的行） */
+function stripComments(sql) {
+  return sql
+    .split('\n')
+    .filter((line) => !line.trim().startsWith('--'))
+    .join('\n')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+const schemaSql = fs.readFileSync(path.join(ROOT, 'migrations', '0001_init.sql'), 'utf8');
+const schemaStatements = splitStatements(schemaSql);
+const seedStatements = splitStatements(lines.join('\n'));
+
+const moduleSource = `/**
+ * 自动生成，请勿手工编辑 —— 由 scripts/build-seed.mjs 从 migrations/*.sql 生成。
+ *
+ * Worker 首次访问且检测到表不存在时，会依次执行下面的语句自动初始化数据库，
+ * 所以部署时不需要手动执行迁移命令。
+ * 所有语句都是幂等的（CREATE TABLE IF NOT EXISTS / INSERT OR IGNORE），重复执行无副作用。
+ */
+
+export const SCHEMA_STATEMENTS = ${JSON.stringify(schemaStatements, null, 2)};
+
+export const SEED_STATEMENTS = ${JSON.stringify(seedStatements, null, 2)};
+`;
+
+const modulePath = path.join(ROOT, 'src', 'schema.js');
+fs.writeFileSync(modulePath, moduleSource);
+console.log(`已生成 ${path.relative(ROOT, modulePath)}`);
+console.log(`  建表语句 ${schemaStatements.length} 条 · 数据语句 ${seedStatements.length} 条`);

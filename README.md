@@ -42,24 +42,23 @@ Cloudflare Workers + D1 架构：数据存在数据库里，接口由 Worker 提
 门户只调用 `/api/public/site`，这个接口返回的内容里**不含**任何伙伴、项目、
 合同与资金信息 —— 未登录的人无论如何都拿不到业务数据。
 
-## 首次部署
+## 部署
 
-完整步骤见 **[DEPLOY.md](DEPLOY.md)**（含控制台截图路径、绑定 D1 的三种做法、排错表）。
-
-最短路径：
+只需要两件事：建一个 D1 数据库并绑定、填两个变量。
+建表和写入初始数据由代码在首次访问时自动完成，不用跑迁移。
 
 ```bash
 npm install
 npx wrangler login
 
-npm run deploy      # 首次会自动创建并绑定 D1，把 database_id 回写进 wrangler.jsonc
-npm run db:migrate  # 建表并写入初始数据
+npx wrangler d1 create partnerrealm     # 建库并自动写入绑定，问你时选 Yes
+npx wrangler secret put ADMIN_PASSWORD  # 后台登录口令
+npx wrangler secret put SESSION_SECRET  # 会话密钥，≥32 字符
 
-npx wrangler secret put ADMIN_PASSWORD    # 后台登录口令
-npx wrangler secret put SESSION_SECRET    # 会话密钥，≥32 字符
-
-npm run deploy      # 再部署一次，让机密生效
+npm run deploy
 ```
+
+控制台操作方式、域名绑定、排错见 **[DEPLOY.md](DEPLOY.md)**。
 
 ## 配置项
 

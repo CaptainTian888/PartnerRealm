@@ -4,23 +4,23 @@
 -- 由 API 返回明确的冲突提示，避免产生孤儿记录。
 
 -- 站点文案：每个区块一行 JSON（brand / hero / about / philosophy / stats / contact / footer）
-CREATE TABLE settings (
+CREATE TABLE IF NOT EXISTS settings (
   key        TEXT PRIMARY KEY,
   value      TEXT NOT NULL,
   updated_at TEXT NOT NULL
 );
 
 -- 组织架构
-CREATE TABLE departments (
+CREATE TABLE IF NOT EXISTS departments (
   id          TEXT PRIMARY KEY,
   parent_id   TEXT REFERENCES departments(id) ON DELETE RESTRICT,
   name        TEXT NOT NULL,
   description TEXT NOT NULL DEFAULT '',
   sort_order  INTEGER NOT NULL DEFAULT 0
 );
-CREATE INDEX idx_departments_parent ON departments(parent_id);
+CREATE INDEX IF NOT EXISTS idx_departments_parent ON departments(parent_id);
 
-CREATE TABLE members (
+CREATE TABLE IF NOT EXISTS members (
   id            TEXT PRIMARY KEY,
   department_id TEXT NOT NULL REFERENCES departments(id) ON DELETE CASCADE,
   name          TEXT NOT NULL,
@@ -29,10 +29,10 @@ CREATE TABLE members (
   phone         TEXT NOT NULL DEFAULT '',
   sort_order    INTEGER NOT NULL DEFAULT 0
 );
-CREATE INDEX idx_members_dept ON members(department_id);
+CREATE INDEX IF NOT EXISTS idx_members_dept ON members(department_id);
 
 -- 合作伙伴
-CREATE TABLE partners (
+CREATE TABLE IF NOT EXISTS partners (
   id                TEXT PRIMARY KEY,
   name              TEXT NOT NULL,
   short_name        TEXT NOT NULL DEFAULT '',
@@ -50,9 +50,9 @@ CREATE TABLE partners (
   created_at        TEXT NOT NULL,
   updated_at        TEXT NOT NULL
 );
-CREATE INDEX idx_partners_status ON partners(status);
+CREATE INDEX IF NOT EXISTS idx_partners_status ON partners(status);
 
-CREATE TABLE partner_contacts (
+CREATE TABLE IF NOT EXISTS partner_contacts (
   id         TEXT PRIMARY KEY,
   partner_id TEXT NOT NULL REFERENCES partners(id) ON DELETE CASCADE,
   name       TEXT NOT NULL,
@@ -61,10 +61,10 @@ CREATE TABLE partner_contacts (
   email      TEXT NOT NULL DEFAULT '',
   sort_order INTEGER NOT NULL DEFAULT 0
 );
-CREATE INDEX idx_contacts_partner ON partner_contacts(partner_id);
+CREATE INDEX IF NOT EXISTS idx_contacts_partner ON partner_contacts(partner_id);
 
 -- 项目
-CREATE TABLE projects (
+CREATE TABLE IF NOT EXISTS projects (
   id          TEXT PRIMARY KEY,
   code        TEXT NOT NULL DEFAULT '',
   name        TEXT NOT NULL,
@@ -81,10 +81,10 @@ CREATE TABLE projects (
   created_at  TEXT NOT NULL,
   updated_at  TEXT NOT NULL
 );
-CREATE INDEX idx_projects_partner ON projects(partner_id);
-CREATE INDEX idx_projects_status ON projects(status);
+CREATE INDEX IF NOT EXISTS idx_projects_partner ON projects(partner_id);
+CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status);
 
-CREATE TABLE milestones (
+CREATE TABLE IF NOT EXISTS milestones (
   id         TEXT PRIMARY KEY,
   project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
   title      TEXT NOT NULL,
@@ -93,10 +93,10 @@ CREATE TABLE milestones (
   note       TEXT NOT NULL DEFAULT '',
   sort_order INTEGER NOT NULL DEFAULT 0
 );
-CREATE INDEX idx_milestones_project ON milestones(project_id);
+CREATE INDEX IF NOT EXISTS idx_milestones_project ON milestones(project_id);
 
 -- 合同
-CREATE TABLE contracts (
+CREATE TABLE IF NOT EXISTS contracts (
   id                TEXT PRIMARY KEY,
   no                TEXT NOT NULL DEFAULT '',
   name              TEXT NOT NULL,
@@ -116,11 +116,11 @@ CREATE TABLE contracts (
   created_at        TEXT NOT NULL,
   updated_at        TEXT NOT NULL
 );
-CREATE INDEX idx_contracts_partner ON contracts(partner_id);
-CREATE INDEX idx_contracts_project ON contracts(project_id);
+CREATE INDEX IF NOT EXISTS idx_contracts_partner ON contracts(partner_id);
+CREATE INDEX IF NOT EXISTS idx_contracts_project ON contracts(project_id);
 
 -- 资金流水
-CREATE TABLE transactions (
+CREATE TABLE IF NOT EXISTS transactions (
   id          TEXT PRIMARY KEY,
   date        TEXT NOT NULL DEFAULT '',
   direction   TEXT NOT NULL DEFAULT 'in',
@@ -137,14 +137,14 @@ CREATE TABLE transactions (
   created_at  TEXT NOT NULL,
   updated_at  TEXT NOT NULL
 );
-CREATE INDEX idx_tx_partner ON transactions(partner_id);
-CREATE INDEX idx_tx_date ON transactions(date);
-CREATE INDEX idx_tx_status ON transactions(status);
+CREATE INDEX IF NOT EXISTS idx_tx_partner ON transactions(partner_id);
+CREATE INDEX IF NOT EXISTS idx_tx_date ON transactions(date);
+CREATE INDEX IF NOT EXISTS idx_tx_status ON transactions(status);
 
 -- 登录失败记录，用于限流；成功登录后清空该来源的记录
-CREATE TABLE login_attempts (
+CREATE TABLE IF NOT EXISTS login_attempts (
   id   INTEGER PRIMARY KEY AUTOINCREMENT,
   ip   TEXT NOT NULL,
   at   INTEGER NOT NULL
 );
-CREATE INDEX idx_login_ip_at ON login_attempts(ip, at);
+CREATE INDEX IF NOT EXISTS idx_login_ip_at ON login_attempts(ip, at);
