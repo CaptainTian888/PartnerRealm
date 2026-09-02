@@ -1,0 +1,65 @@
+{
+  "company": {
+    "name": "稳链同创",
+    "legalName": "稳链同创（上海）产业协同有限公司",
+    "founded": "2018",
+    "note": "组织架构用于项目负责人指派与内部权责划分。"
+  },
+  "departments": [
+    {
+      "id": "dept-exec",
+      "parentId": null,
+      "name": "总经办",
+      "desc": "统筹公司战略、伙伴策略与重大项目决策。",
+      "order": 1,
+      "members": [
+        { "id": "m-001", "name": "陈稳", "title": "总经理", "email": "chenwen@wenlian.example.com", "phone": "138 0000 0001" },
+        { "id": "m-002", "name": "林同", "title": "副总经理 / 合作伙伴负责人", "email": "lintong@wenlian.example.com", "phone": "138 0000 0002" }
+      ]
+    },
+    {
+      "id": "dept-partner",
+      "parentId": "dept-exec",
+      "name": "伙伴发展部",
+      "desc": "负责伙伴引入、分级维护、年度复盘与权益兑现。",
+      "order": 2,
+      "members": [
+        { "id": "m-003", "name": "赵拓", "title": "伙伴发展总监", "email": "zhaotuo@wenlian.example.com", "phone": "138 0000 0003" },
+        { "id": "m-004", "name": "孙宁", "title": "伙伴运营经理", "email": "sunning@wenlian.example.com", "phone": "138 0000 0004" }
+      ]
+    },
+    {
+      "id": "dept-delivery",
+      "parentId": "dept-exec",
+      "name": "项目交付部",
+      "desc": "承接联合项目的排期、里程碑管理与交付验收。",
+      "order": 3,
+      "members": [
+        { "id": "m-005", "name": "周衡", "title": "交付总监", "email": "zhouheng@wenlian.example.com", "phone": "138 0000 0005" },
+        { "id": "m-006", "name": "吴岚", "title": "高级项目经理", "email": "wulan@wenlian.example.com", "phone": "138 0000 0006" },
+        { "id": "m-007", "name": "郑帆", "title": "项目经理", "email": "zhengfan@wenlian.example.com", "phone": "138 0000 0007" }
+      ]
+    },
+    {
+      "id": "dept-finance",
+      "parentId": "dept-exec",
+      "name": "财务与法务部",
+      "desc": "合同审核、收付款计划、发票与回款跟踪。",
+      "order": 4,
+      "members": [
+        { "id": "m-008", "name": "何清", "title": "财务负责人", "email": "heqing@wenlian.example.com", "phone": "138 0000 0008" },
+        { "id": "m-009", "name": "许律", "title": "法务顾问", "email": "xulv@wenlian.example.com", "phone": "138 0000 0009" }
+      ]
+    },
+    {
+      "id": "dept-supply",
+      "parentId": "dept-exec",
+      "name": "供应链中心",
+      "desc": "产能协调、仓配资源整合与履约稳定性保障。",
+      "order": 5,
+      "members": [
+        { "id": "m-010", "name": "马途", "title": "供应链总监", "email": "matu@wenlian.example.com", "phone": "138 0000 0010" }
+      ]
+    }
+  ]
+}

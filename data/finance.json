@@ -1,0 +1,15 @@
+{
+  "transactions": [
+    { "id": "f-001", "date": "2025-06-30", "direction": "in", "category": "合同款", "partnerId": "p-002", "projectId": "prj-002", "contractId": "c-002", "amount": 1860000, "currency": "CNY", "status": "paid", "method": "银行转账", "invoiceNo": "FP2025063001", "note": "数据中台首期款 30%" },
+    { "id": "f-002", "date": "2025-07-05", "direction": "out", "category": "服务费", "partnerId": "p-001", "projectId": "prj-001", "contractId": "c-001", "amount": 1200000, "currency": "CNY", "status": "paid", "method": "银行转账", "invoiceNo": "FP2025070501", "note": "Q2 仓配服务费" },
+    { "id": "f-003", "date": "2025-10-08", "direction": "out", "category": "服务费", "partnerId": "p-001", "projectId": "prj-001", "contractId": "c-001", "amount": 1200000, "currency": "CNY", "status": "paid", "method": "银行转账", "invoiceNo": "FP2025100801", "note": "Q3 仓配服务费" },
+    { "id": "f-004", "date": "2025-12-10", "direction": "in", "category": "合同款", "partnerId": "p-002", "projectId": "prj-002", "contractId": "c-002", "amount": 2480000, "currency": "CNY", "status": "paid", "method": "银行转账", "invoiceNo": "FP2025121001", "note": "数据中台二期款 40%" },
+    { "id": "f-005", "date": "2025-12-31", "direction": "in", "category": "分成", "partnerId": "p-003", "projectId": "prj-003", "contractId": "c-003", "amount": 420000, "currency": "CNY", "status": "paid", "method": "银行转账", "invoiceNo": "FP2025123101", "note": "华南渠道 Q4 分成" },
+    { "id": "f-006", "date": "2026-01-10", "direction": "out", "category": "服务费", "partnerId": "p-001", "projectId": "prj-001", "contractId": "c-001", "amount": 1200000, "currency": "CNY", "status": "invoiced", "method": "银行转账", "invoiceNo": "FP2026011001", "note": "Q4 仓配服务费，待付" },
+    { "id": "f-007", "date": "2026-03-31", "direction": "in", "category": "分成", "partnerId": "p-003", "projectId": "prj-003", "contractId": "c-003", "amount": 380000, "currency": "CNY", "status": "planned", "method": "银行转账", "invoiceNo": "", "note": "华南渠道 Q1 分成，预估" },
+    { "id": "f-008", "date": "2026-05-31", "direction": "in", "category": "尾款", "partnerId": "p-002", "projectId": "prj-002", "contractId": "c-002", "amount": 1860000, "currency": "CNY", "status": "planned", "method": "银行转账", "invoiceNo": "", "note": "数据中台终验尾款 30%" },
+    { "id": "f-009", "date": "2025-11-20", "direction": "out", "category": "预付款", "partnerId": "p-001", "projectId": "prj-006", "contractId": "c-006", "amount": 300000, "currency": "CNY", "status": "paid", "method": "银行转账", "invoiceNo": "FP2025112001", "note": "联合仓试点前期投入" },
+    { "id": "f-010", "date": "2025-03-31", "direction": "in", "category": "尾款", "partnerId": "p-005", "projectId": "prj-005", "contractId": "c-005", "amount": 1260000, "currency": "CNY", "status": "paid", "method": "银行转账", "invoiceNo": "FP2025033101", "note": "产线改造结项尾款" },
+    { "id": "f-011", "date": "2025-12-20", "direction": "in", "category": "合同款", "partnerId": "p-003", "projectId": "prj-003", "contractId": "c-003", "amount": 260000, "currency": "CNY", "status": "overdue", "method": "银行转账", "invoiceNo": "FP2025122001", "note": "网点建设补偿款，逾期未收" }
+  ]
+}

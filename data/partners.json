@@ -1,0 +1,99 @@
+{
+  "partners": [
+    {
+      "id": "p-001",
+      "name": "恒通供应链科技有限公司",
+      "shortName": "恒通供应链",
+      "type": "供应商",
+      "tier": "核心",
+      "status": "active",
+      "industry": "仓储物流",
+      "region": "华东 · 上海",
+      "website": "https://example.com/hengtong",
+      "since": "2019-04-01",
+      "owner": "m-010",
+      "intro": "覆盖长三角的仓配一体服务商，为联合项目提供仓储、干线与末端配送能力。",
+      "tags": ["仓配一体", "长三角", "年度框架"],
+      "visibleOnPortal": true,
+      "contacts": [
+        { "name": "王恒", "title": "商务总监", "phone": "139 0000 0011", "email": "wangheng@example.com" }
+      ]
+    },
+    {
+      "id": "p-002",
+      "name": "锐见数据技术（北京）有限公司",
+      "shortName": "锐见数据",
+      "type": "技术",
+      "tier": "核心",
+      "status": "active",
+      "industry": "企业软件",
+      "region": "华北 · 北京",
+      "website": "https://example.com/ruijian",
+      "since": "2021-08-15",
+      "owner": "m-005",
+      "intro": "提供供应链数据中台与可视化能力，联合承接客户的数字化改造项目。",
+      "tags": ["数据中台", "联合交付"],
+      "visibleOnPortal": true,
+      "contacts": [
+        { "name": "李锐", "title": "解决方案负责人", "phone": "139 0000 0012", "email": "lirui@example.com" }
+      ]
+    },
+    {
+      "id": "p-003",
+      "name": "南方汇通贸易有限公司",
+      "shortName": "南方汇通",
+      "type": "渠道",
+      "tier": "重点",
+      "status": "active",
+      "industry": "商贸流通",
+      "region": "华南 · 广州",
+      "website": "",
+      "since": "2022-03-10",
+      "owner": "m-003",
+      "intro": "华南区域渠道伙伴，负责区域客户开拓与本地化服务落地。",
+      "tags": ["区域渠道", "华南"],
+      "visibleOnPortal": true,
+      "contacts": [
+        { "name": "黄汇", "title": "总经理", "phone": "139 0000 0013", "email": "huanghui@example.com" }
+      ]
+    },
+    {
+      "id": "p-004",
+      "name": "启元产业投资合伙企业",
+      "shortName": "启元投资",
+      "type": "投资",
+      "tier": "重点",
+      "status": "active",
+      "industry": "股权投资",
+      "region": "华东 · 杭州",
+      "website": "",
+      "since": "2023-06-01",
+      "owner": "m-002",
+      "intro": "产业方向的财务投资人，参与联合项目的资金配套与被投企业资源对接。",
+      "tags": ["资金配套", "产业资源"],
+      "visibleOnPortal": false,
+      "contacts": [
+        { "name": "沈元", "title": "投资总监", "phone": "139 0000 0014", "email": "shenyuan@example.com" }
+      ]
+    },
+    {
+      "id": "p-005",
+      "name": "西部智造装备有限公司",
+      "shortName": "西部智造",
+      "type": "战略",
+      "tier": "一般",
+      "status": "paused",
+      "industry": "高端制造",
+      "region": "西南 · 成都",
+      "website": "",
+      "since": "2024-01-20",
+      "owner": "m-004",
+      "intro": "装备制造伙伴，此前合作的产线改造项目已结项，暂无在执行合作。",
+      "tags": ["制造", "待激活"],
+      "visibleOnPortal": false,
+      "contacts": [
+        { "name": "秦智", "title": "市场经理", "phone": "139 0000 0015", "email": "qinzhi@example.com" }
+      ]
+    }
+  ]
+}
